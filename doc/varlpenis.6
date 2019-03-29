@@ -1,0 +1,54 @@
+.Dd March 28, 2019
+.Dt VARLPENIS 6
+.Os
+.Sh NAME
+.Nm varlpenis
+.Nd generate ASCII-art penis of arbitrary length
+.Sh SYNOPSIS
+.Nm
+.Op Fl hv
+.Op Fl e Ar distance
+.Op Fl l Ar length
+.Sh DESCRIPTION
+When
+.Nm
+is run with no arguments, it prints a penis of random length in plaintext.
+.Pp
+The following options are available:
+.Bl -tag -width indent
+.It Fl e Ar distance
+Print a penis with
+.Ar distance
+number of
+.So
+~
+.Sc
+(tilde).
+.It Fl h
+Print help message and exit.
+.It Fl l Ar length
+Print a penis with
+.Ar length
+number of
+.So
+=
+.Sc
+(equals).
+.It Fl v
+Print version information and exit.
+.El
+.Sh EXIT STATUS
+.Nm
+exits with 0 on success, and >0 if an error occurs.
+When compiled with
+.Dv -D_USE_SYSEXITS ,
+codes from
+.Xr sysexits 3
+are used instead.
+.Sh STANDARDS
+.St -ansiC
+.Sh AUTHORS
+.An Seth Price Aq Mt sprice623@aol.com
+.Sh BUGS
+None currently known.  Report any bugs to the issue tracker at
+.Lk https://www.gitlab.com/ssterling/varlpenis/issues .

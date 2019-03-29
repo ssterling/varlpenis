@@ -1,0 +1,364 @@
+#!/bin/sh
+# Configure script for varlpenis
+# Seth Price - updated 28 Mar 2019
+
+###########################################################
+# VARIABLE INITIALISATION
+
+# Package information
+pkg_name="varlpenis"
+pkg_version="1.0"
+
+# Error-reporting shenanigans
+log_w="warning"
+log_e="ERROR"
+
+# Default compile/build paths
+default_srcdir="./src"
+default_docdir="./doc"
+
+# Default installation paths
+# (`${PREFIX}' expands within the Makefile)
+default_prefix="/usr/local"
+default_bindir="\${PREFIX}/bin"
+default_datadir="\${PREFIX}/share"
+default_mandir="\${DATADIR}/man"
+
+# Default programs
+default_cc="cc"
+default_ld="ld"
+default_rm="rm -r"
+
+# Default program arguments
+default_CFLAGS=""
+default_LDFLAGS=""
+
+# Script variables
+helpme="no"
+is_verbose="no"
+is_quiet="no"
+ifndef_guards="yes"
+
+###########################################################
+# PARSE OPTIONS
+
+# The `us_' variables are left undefined unless specified as options
+for arg in $@; do
+	case $arg in
+		--bindir=*)
+			us_bindir=`echo $arg | sed 's/--bindir=//'`
+			;;
+		--datadir=*)
+			us_datadir=`echo $arg | sed 's/--datadir=//'`
+			;;
+		--help | -help | -h | --h)
+			helpme="yes"
+			;;
+		--mandir=*)
+			us_mandir=`echo $arg | sed 's/--mandir=//'`
+			;;
+		--no-ifndef-guards)
+			ifndef_guards="no"
+			;;
+		--prefix=*)
+			us_prefix=`echo $arg | sed 's/--prefix=//'`
+			;;
+		--quiet | -q)
+			is_quiet="yes"
+			;;
+		--srcdir=*)
+			us_srcdir=`echo $arg | sed 's/--srcdir=//'`
+			;;
+		--verbose | -v)
+			is_verbose="yes"
+			;;
+		-*)
+			echo "$log_e: Unrecognised option \`$arg'.  Type \`$0 --help' for help." >&2
+			exit 1
+			;;
+		*)
+			echo "$log_e: Stray argument \`$arg'.  Type \`$0 --help' for help." >&2
+			exit 1
+			;;
+	esac
+done
+
+if test "$helpme" = "yes"; then
+	cat <<EOF
+Configure script for varlpenis, copyright 2019 Seth Price
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+To assign environment variables (e.g. CC, CFLAGS), specify them with
+\`VAR=VALUE'.  See below for descriptions of some useful variables.
+
+Script configuration:
+  -h, --help          Display this message and exit
+  -q, --quiet         Do not print \'Checking...' messages
+  -v, --verbose       Be verbose in saying what's going on
+      --srcdir=DIR    Find the source files in directory DIR
+
+Installation directories:
+  --prefix=DIR        Normal prefix [$default_prefix]
+  --bindir=DIR        User executables [$default_bindir]
+  --datadir=DIR       Read-only program data [$default_datadir]
+  --mandir=DIR        UNIX manpage documentation [$default_mandir]
+  --no-ifndef-guards  Ignore environment variables for installation dirs
+
+Optional features
+
+Environment variables:
+  CC                  C compiler command [ auto-detected ]
+  CFLAGS              C compiler flags [$default_CFLAGS]
+  LDFLAGS             Linker flags, e.g. -L<lib dir> if you have libraries
+                      in a non-standard directory <lib dir>
+		      [$default_LDFLAGS]
+  LIBS                Libraries to pass to the linker, e.g. -l<library>
+
+These variables may already be set by your shell.  If you don't want
+\`configure' to decide for you, append \`VARIABLE=' to the command line.
+EOF
+	exit 0
+fi
+
+# Check for conflicting flags
+if test "$is_verbose" = "yes" && test "$is_quiet" = "yes"; then
+	echo "Flags \`-q' and \`-v' cannot be used together." >&2
+	exit 1
+fi
+
+test "$is_verbose" = "yes" && echo "Entering verbose mode."
+
+# Check whether PWD is usable
+test "$is_verbose" = "$yes" &&
+  echo -n "Checking whether PWD is read-/write-able... "
+cs_pwd=`pwd` && test -n $cs_pwd &&
+ls_di=`ls -di .` &&
+pwd_ls_di=`cd "$cd_pwd" && ls -di .` ||
+{
+	echo "$log_e: Working directory cannot be determined." >&2
+	exit 1
+}
+test -w "$cs_pwd" ||
+{
+	echo "$log_e: Working directory is not writeable." >&2
+	exit 1
+}
+
+# Set installation directories
+for var in srcdir docdir prefix bindir datadir mandir; do
+	eval usval="\$us_$var"
+	eval defval="\$default_$var"
+	if test -n "$usval" && test ! "$usval" = "$defval"; then
+		test "$is_verbose" = "yes" &&
+		  echo "Using user-specified directory for \`$var': $usval"
+		eval $var="\$us_$var"
+	else
+		test "$is_verbose" = "yes" &&
+		  echo "Using default directory for \`$var': $defval"
+		eval $var="\$default_$var"
+	fi
+done
+
+# Check for compiler toolkits
+if test -n "$CC" && command -v "$CC" >/dev/null 2>&1; then
+	# XXX dangerous assumption
+	test "$is_verbose" = "yes" &&
+	  echo "Using user-specified compiler toolkit: \`$CC'."
+else
+	# In verbose mode, "Checking for..." displays each iteration;
+	# otherwise, just show this catch-all message
+	test "$is_quiet" = "no" && test "$is_verbose" = "no" &&
+	  echo -n "Checking for a valid compiler... "
+
+	# XXX There has to be a more elegant way to do this
+	while true; do
+		test "$is_verbose" = "yes" &&
+		  echo -n "Checking for Clang toolkit... "
+		if command -v clang >/dev/null 2>&1; then
+			test "$is_quiet" = "no" && echo "found."
+			CC="clang"
+			break
+		else
+			test "$is_verbose" = "yes" && echo "not found."
+		fi
+
+		test "$is_verbose" = "yes" &&
+		  echo -n "Checking for GNU toolkit... "
+		if command -v gcc >/dev/null 2>&1; then
+			test "$is_quiet" = "no" && echo "found."
+			CC="gcc"
+			break
+		else
+			test "$is_verbose" = "yes" && echo "not found."
+		fi
+
+		# XXX probably dangerous
+		test "$is_verbose" = "yes" &&
+		  echo -n "Checking for something named \`cc'... "
+		if command -v cc >/dev/null 2>&1; then
+			test "$is_quiet" = "no" && echo "found."
+			CC="cc"
+			break
+		else
+			test "$is_verbose" = "yes" && echo "not found."
+		fi
+
+		# TODO: more valid toolkits
+
+		echo "$log_e: No acceptable compiler found in \$PATH." >&2
+		echo "$log_e: Specify a compiler using \`CC=/path/to' when "\
+		     "running this script." >&2
+		exit 1
+	done
+fi
+
+# Check for C standard library (at least those used in the program)
+test "$is_quiet" = "no" &&
+  echo -n "Checking for C89 standard library headers... "
+cat >conftest.c <<_EOF
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <ctype.h>
+
+int main() { return 0; }
+_EOF
+(eval $CC $CFLAGS conftest.c -o conftest) 2>conftest.err
+rm -f conftest.o conftest.c conftest
+if test ! -s conftest.err; then
+	test "$is_quiet" = "no" && echo "found."
+	rm -f conftest.err
+else
+	test "$is_quiet" = "no" && echo "not found."
+	echo "$log_e: C standard library is not properly implemented." >&2
+	echo "$log_e: Specify a valid include dir in your CFLAGS with "\
+	     "\`CFLAGS=-I/path/to/dir' when running this script." >&2
+	exit 1
+fi
+
+# Check for POSIX standard library
+test "$is_quiet" = "no" &&
+  echo -n "Checking for POSIX standard library headers... "
+cat >conftest.c <<_EOF
+#include <unistd.h>
+
+int main() { return 0; }
+_EOF
+(eval $CC $CFLAGS conftest.c -o conftest) 2>conftest.err
+rm -f conftest.o conftest.c conftest
+if test ! -s conftest.err; then
+	test "$is_quiet" = "no" && echo "found."
+	rm -f conftest.err
+else
+	test "$is_quiet" = "no" && echo "not found."
+	echo "$log_e: POSIX standard library is not properly implemented." >&2
+	echo "$log_e: Specify a valid include dir in your CFLAGS with "\
+	     "\`CFLAGS=-I/path/to/dir' when running this script." >&2
+	exit 1
+fi
+
+# Check for sysexits header, if using
+if test "$use_sysexits" = "yes"; then
+	test "$is_quiet" = "no" &&
+	  echo -n "Checking for POSIX standard library headers... "
+	cat >conftest.c <<_EOF
+#include <sysexits.h>
+
+int main() { return EX_OK; }
+_EOF
+	(eval $CC $CFLAGS conftest.c -o conftest) 2>conftest.err
+	rm -f conftest.o conftest.c conftest
+	if test ! -s conftest.err; then
+		test "$is_quiet" = "no" && echo "found."
+		rm -f conftest.err
+	else
+		test "$is_quiet" = "no" && echo "not found."
+		echo "$log_e: POSIX standard library is not properly implemented." >&2
+		echo "$log_e: Specify a valid include dir in your CFLAGS with "\
+		     "\`CFLAGS=-I/path/to/dir' when running this script." >&2
+		exit 1
+	fi
+fi
+
+# Generate `$CFLAGS' based on what the user specified
+test "$is_verbose" = "yes" &&
+  echo -n "Computing CFLAGS... "
+test -z "$CFLAGS" && CFLAGS=""
+CFLAGS="$CFLAGS $default_CFLAGS"
+test "$is_verbose" = "yes" && echo "done."
+
+# =============
+
+test "$is_quiet" = "no" &&
+  echo -n "Generating Makefile... "
+
+cat >Makefile <<_EOF
+## Makefile for varlpenis
+## Generated by \`configure'
+
+# Programs
+CC=$CC
+CTAGS=ctags
+SHELL=/bin/sh
+RM=rm -rf
+
+# Compiler flags
+CFLAGS=$CFLAGS
+LDFLAGS=$LDFLAGS
+
+# Install commands
+INSTALL=install -C
+INSTALL_DIR=\${INSTALL} -d -m 755
+INSTALL_PROGRAM=\${INSTALL} -m 755
+INSTALL_PROGRAM_STRIP=\${INSTALL_PROGRAM} -s
+INSTALL_DATA=\${INSTALL} -m 644
+INSTALL_MAN=\${INSTALL} -m 644
+
+# Installation directories
+SRCDIR=$srcdir
+DOCDIR=$docdir
+_EOF
+if test "$ifndef_guards" = "no"; then
+	cat >>Makefile <<_EOF
+PREFIX=$prefix
+BINDIR=$bindir
+DATADIR=$datadir
+MANDIR=$mandir
+
+_EOF
+else
+	cat >>Makefile <<_EOF
+.ifndef PREFIX
+PREFIX=$prefix
+.endif
+.ifndef BINDIR
+BINDIR=$bindir
+.endif
+.ifndef DATADIR
+DATADIR=$datadir
+.endif
+.ifndef MANDIR
+MANDIR=$mandir
+.endif
+_EOF
+fi
+
+cat Makefile.in >> Makefile
+
+test "$is_quiet" = "no" && echo "done."
+
+test "$is_quiet" = "no" &&
+  echo -n "Generating \`check.sh'... "
+cat >check.sh <<_EOF
+#!/bin/sh
+test -f ./varlpenis || { echo "not found"; exit 1; }
+tmp=\`./varlpenis -l 7 -e 3\`
+test "\$tmp" = "8=======D~~~" && { echo "works"; exit 0; }
+echo "failed"; exit 1
+_EOF
+test "$is_quiet" = "no" && echo "done."
+
+test "$is_quiet" = "no" &&
+  echo "Configuration complete; type \`make' to build."
+exit 0

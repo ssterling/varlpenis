@@ -1,0 +1,15 @@
+# I'm tired of seeing all these as untracked files
+
+# Vim files
+.*.sw[a-p]
+Session.vim
+.*.un~
+
+# Built files (not to be comitted)
+Makefile
+check.sh
+tags
+varlpenis
+
+# I test out the ports and packaging things in here
+pkg/*

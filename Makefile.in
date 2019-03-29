@@ -1,0 +1,62 @@
+#####################
+# Begin Makefile.in #
+#####################
+
+# XXX: For reasons beyond my understanding, `port check' (on FreeBSD) tries to
+#      install to an empty directory for staging instead of one populated by
+#      mtree(8).  Thanks to this, the directories must first be created,
+#      separate from the install command.  (GNU `install' creates parent
+#      directories with `-D`, but this isn't compatible with the traditional
+#      BSD `install'.
+
+# undocumented
+CFLAGS_DEBUG = -Wall -Wextra -Wshadow -Wformat -Wconversion -Wundef -Wno-unused \
+	       -Wconditional-uninitialized -Wmissing-variable-declarations \
+	       -Wmissing-prototypes -Wstrict-prototypes \
+	       -g -O0 -std=c89 -pedantic
+
+C_FILES = ${SRCDIR}/main.c ${SRCDIR}/draw.c
+
+.PHONY: all install install-strip install-bin install-bin-strip \
+	install-docs uninstall uninstall-bin uninstall-docs check clean
+
+all: varlpenis tags
+
+varlpenis:
+	${CC} ${CFLAGS} ${C_FILES} -o varlpenis
+
+install: install-bin install-docs
+
+install-strip: install-bin-strip install-docs
+
+install-bin: varlpenis
+	${INSTALL_DIR} ${BINDIR}
+	${INSTALL_PROGRAM} varlpenis ${BINDIR}
+
+install-bin-strip: varlpenis
+	${INSTALL_DIR} ${BINDIR}
+	${INSTALL_PROGRAM_STRIP} varlpenis ${BINDIR}
+
+install-docs:
+	${INSTALL_DIR} ${MANDIR}/man6
+	${INSTALL_MAN} ${DOCDIR}/varlpenis.6 ${MANDIR}/man6/varlpenis.6
+	${INSTALL_DIR} ${DATADIR}/varlpenis
+	${INSTALL_DATA} 8=D.jpg ${DATADIR}/varlpenis/8=D.jpg
+
+uninstall: uninstall-bin uninstall-docs
+
+uninstall-bin:
+	${RM} ${BINDIR}/varlpenis
+
+uninstall-docs:
+	${RM} ${MANDIR}/man6/varlpenis.6
+	${RM} ${DATADIR}/varlpenis
+
+check: varlpenis
+	${SHELL} ./check.sh
+
+tags:
+	${CTAGS} ${SRCDIR}/*
+
+clean:
+	${RM} *.o varlpenis check.sh tags
