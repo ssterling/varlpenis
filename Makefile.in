@@ -23,7 +23,7 @@ C_FILES = ${SRCDIR}/main.c ${SRCDIR}/draw.c
 all: varlpenis tags
 
 varlpenis:
-	${CC} ${CFLAGS} ${C_FILES} -o varlpenis
+	${CC} ${CFLAGS} ${C_FILES} ${FEATURE_CFLAGS} -o varlpenis
 
 install: install-bin install-docs
 

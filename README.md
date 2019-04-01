@@ -10,6 +10,7 @@ Straight from the program:
 ```
 usage: varlpenis [options]
   options:
+    -c       output color
     -e num   set length of semen string
     -h       show this message
     -l num   set length of shaft
@@ -41,6 +42,16 @@ $ make
 
 Should work on UNIX-like systems; untested on Winblows, MS-DOS or anything
 else.  Written in ANSI C using only the standard library.
+
+### Configuration
+
+Use any of the following when running `./configure` to control optional
+features:
+
+* `--use-color`: Enable colour support using ANSI escape codes
+* more to come…
+
+Run `./configure --help' for info on installation paths, compilers, etc.
 
 Some notes
 ----------

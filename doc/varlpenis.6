@@ -6,7 +6,7 @@
 .Nd generate ASCII-art penis of arbitrary length
 .Sh SYNOPSIS
 .Nm
-.Op Fl hv
+.Op Fl chv
 .Op Fl e Ar distance
 .Op Fl l Ar length
 .Sh DESCRIPTION
@@ -16,6 +16,9 @@ is run with no arguments, it prints a penis of random length in plaintext.
 .Pp
 The following options are available:
 .Bl -tag -width indent
+.It Fl c
+Print escape sequences for colored output.  Only available if compiled with
+.Dv VP_USE_COLOR .
 .It Fl e Ar distance
 Print a penis with
 .Ar distance
@@ -49,6 +52,12 @@ are used instead.
 .St -ansiC
 .Sh AUTHORS
 .An Seth Price Aq Mt sprice623@aol.com
+.Sh CAVEATS
+Due to the limitations of four-bit color codes, the program output (when
+compiled with and using color support) may appear to only represent a
+Caucasian, Oriental or other light-skinned phallus\(emor, more specifically,
+Homer Simpson's erect penis with an inflamed glans (depending on your
+terminal's color scheme).
 .Sh BUGS
 None currently known.  Report any bugs to the issue tracker at
 .Lk https://www.gitlab.com/ssterling/varlpenis/issues .

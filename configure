@@ -39,6 +39,9 @@ is_verbose="no"
 is_quiet="no"
 ifndef_guards="yes"
 
+# Default feature values
+use_color="no"
+
 ###########################################################
 # PARSE OPTIONS
 
@@ -68,6 +71,17 @@ for arg in $@; do
 			;;
 		--srcdir=*)
 			us_srcdir=`echo $arg | sed 's/--srcdir=//'`
+			;;
+		--use-*)
+			feature=`echo $arg | sed 's/--use-//; s/[-.]/_/'`
+			# If the feature variable isn't already initialised to
+			# a default value up above, it (probably) doesn't exist
+			if eval test -n \"\$use_$feature\"; then
+				eval use_$feature="yes"
+			else
+				echo "$log_e: Unrecognised feature \`$feature'.  Type \`$0 --help' for help." >&2
+				exit 1
+			fi
 			;;
 		--verbose | -v)
 			is_verbose="yes"
@@ -104,7 +118,8 @@ Installation directories:
   --mandir=DIR        UNIX manpage documentation [$default_mandir]
   --no-ifndef-guards  Ignore environment variables for installation dirs
 
-Optional features
+Optional features (using --use-FEATURE [all are off by default]):
+  color               Enable colour support using ANSI escape codes
 
 Environment variables:
   CC                  C compiler command [ auto-detected ]
@@ -288,6 +303,14 @@ test -z "$CFLAGS" && CFLAGS=""
 CFLAGS="$CFLAGS $default_CFLAGS"
 test "$is_verbose" = "yes" && echo "done."
 
+# Generate `$feature_flags` based on `--use-FEATURE` variables
+test "$is_verbose" = "yes" &&
+  echo -n "Computing feature CFLAGS... "
+feature_CFLAGS=""
+test "$use_color" = "yes" &&
+  feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR"
+test "$is_verbose" = "yes" && echo "done."
+
 # =============
 
 test "$is_quiet" = "no" &&
@@ -306,6 +329,7 @@ RM=rm -rf
 # Compiler flags
 CFLAGS=$CFLAGS
 LDFLAGS=$LDFLAGS
+FEATURE_CFLAGS=$feature_CFLAGS
 
 # Install commands
 INSTALL=install -C

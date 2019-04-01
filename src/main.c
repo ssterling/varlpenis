@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
 	distance =
 	  rand() % (RAND_DISTANCE_MAX - RAND_DISTANCE_MIN) + RAND_DISTANCE_MIN;
 
-	/* For future use */
 	flags = NO_FLAGS;
 
 	options.flags = NO_OPTS;
@@ -46,8 +45,17 @@ int main(int argc, char *argv[])
 	options.error_char = '!'; /* placeholder */
 
 	opterr = 0;
+#ifdef VP_USE_COLOR
+	while ((ch = getopt(argc, argv, "ce:hl:v")) != -1)
+#else /* VP_USE_COLOR */
 	while ((ch = getopt(argc, argv, "e:hl:v")) != -1)
+#endif /* VP_USE_COLOR */
 		switch (ch) {
+#ifdef VP_USE_COLOR
+			case 'c':
+				flags |= COLOR;
+				break;
+#endif /* VP_USE_COLOR */
 			case 'e':
 				if (atoi(optarg) < 1) {
 					options.error_code = ERR_NOTINT;
@@ -124,6 +132,16 @@ int main(int argc, char *argv[])
 		       VP_PROGRAM_NAME, VP_VERSION_STR, VP_PROGRAM_DESC,
 		       VP_COPYRIGHT);
 	if (options.flags & OPT_HELP)
+#ifdef VP_USE_COLOR
+		printf("usage: %s [options]\n"
+		       "  options:\n"
+		       "    -c       output color\n"
+		       "    -e num   set length of semen string\n"
+		       "    -h       show this message\n"
+		       "    -l num   set length of shaft\n"
+		       "    -v       show copyright and version info\n",
+		       VP_PROGRAM_NAME);
+#else /* VP_USE_COLOR */
 		printf("usage: %s [options]\n"
 		       "  options:\n"
 		       "    -e num   set length of semen string\n"
@@ -131,6 +149,7 @@ int main(int argc, char *argv[])
 		       "    -l num   set length of shaft\n"
 		       "    -v       show copyright and version info\n",
 		       VP_PROGRAM_NAME);
+#endif /* VP_USE_COLOR */
 	if (options.flags & OPT_HELP || options.flags & OPT_VERSION)
 		return 0;
 

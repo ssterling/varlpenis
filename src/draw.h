@@ -27,9 +27,19 @@
 #define HEAD_CHAR           'D'
 #define EJAC_CHAR           '~'
 
-/* For future use */
+#ifdef VP_USE_COLOR
+#define SCROTUM_COLOR_ANSI  "\33[33m"       /* yellow */
+#define SHAFT_COLOR_ANSI    "\33[1m\33[33m" /* bright yellow */
+#define HEAD_COLOR_ANSI     "\33[1m\33[31m" /* bright red */
+#define EJAC_COLOR_ANSI     "\33[1m\33[37m" /* bright white */
+#define RESET_CODE_ANSI     "\33[0m"
+#endif /* VP_USE_COLOR */
+
+/* To avoid changing numbers in potential future expansion,
+ * all flags will be compiled regardless of enabled features */
 enum DRAW_FLAGS_E {
-	NO_FLAGS = 0
+	NO_FLAGS = 0,
+	COLOR = 1
 };
 
 static char *repeat_char(const char ch, unsigned int count);
