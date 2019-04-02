@@ -273,29 +273,6 @@ else
 	exit 1
 fi
 
-# Check for sysexits header, if using
-if test "$use_sysexits" = "yes"; then
-	test "$is_quiet" = "no" &&
-	  echo -n "Checking for POSIX standard library headers... "
-	cat >conftest.c <<_EOF
-#include <sysexits.h>
-
-int main() { return EX_OK; }
-_EOF
-	(eval $CC $CFLAGS conftest.c -o conftest) 2>conftest.err
-	rm -f conftest.o conftest.c conftest
-	if test ! -s conftest.err; then
-		test "$is_quiet" = "no" && echo "found."
-		rm -f conftest.err
-	else
-		test "$is_quiet" = "no" && echo "not found."
-		echo "$log_e: POSIX standard library is not properly implemented." >&2
-		echo "$log_e: Specify a valid include dir in your CFLAGS with "\
-		     "\`CFLAGS=-I/path/to/dir' when running this script." >&2
-		exit 1
-	fi
-fi
-
 # Generate `$CFLAGS' based on what the user specified
 test "$is_verbose" = "yes" &&
   echo -n "Computing CFLAGS... "

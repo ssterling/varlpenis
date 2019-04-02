@@ -8,10 +8,6 @@
 #ifndef VP_OPTIONS_H
 #define VP_OPTIONS_H
 
-/* Winblows and M$-DOS like `/' as an option prefix for some reason; if you
- * really insist on using that instead of `-', change it here. */
-#define OPTIONS_PREFIX_CHAR '-'
-
 enum OPTIONS_E {
 	NO_OPTS      = 0,
 	OPT_HELP     = 1,  /* Print help message to stdout */
@@ -39,8 +35,5 @@ struct OPTIONS_S {
 	unsigned int length;
 	unsigned int distance;
 };
-
-static int is_positive_int(const char *val_str);
-struct OPTIONS_S parse_options(int argc, char *argv[]);
 
 #endif /* ! VP_OPTIONS_H */
