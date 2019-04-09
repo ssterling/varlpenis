@@ -15,6 +15,7 @@
 #include "draw.h"
 #include "options.h"
 #include "strings.h"
+#include "exits.h"
 
 int main(int argc, char *argv[])
 {
@@ -102,12 +103,12 @@ int main(int argc, char *argv[])
 			fprintf(stderr, "Error: option `-%c' requires a "
 			                "positive integer as an argument\n",
 					options.error_char);
-			return 1;
+			return EX_USAGE;
 		case ERR_NOTINT:
 			fprintf(stderr, "Error: argument to option `-%c' "
 			                "must be a positive integer\n",
 			                options.error_char);
-			return 1;
+			return EX_USAGE;
 		case ERR_UNKNOWNCHAR:
 			if (isprint(options.error_char))
 				fprintf(stderr, "Error: unknown option `-%c'\n",
@@ -116,15 +117,15 @@ int main(int argc, char *argv[])
 				fprintf(stderr, "Error: unknown option char "
 						"`\\x%x'\n",
 						(int)options.error_char);
-			return 1;
+			return EX_USAGE;
 		default:
 			fprintf(stderr, "Error: bogus error code received "
 			                "from options parser\n");
-			return 1;
+			return EX_SOFTWARE;
 	}
 
 	/* The code here is a bit clunky, but the intention is to print both
-	 * version and help information if requested.  -- If `return 0' was
+	 * version and help information if requested.  -- If `return' was
 	 * included in the `if' blocks, calling `varlpenis -vh' would print
 	 * version info and exit before printing the help message. */
 	if (options.flags & OPT_VERSION)
@@ -151,7 +152,7 @@ int main(int argc, char *argv[])
 		       VP_PROGRAM_NAME);
 #endif /* VP_USE_COLOR */
 	if (options.flags & OPT_HELP || options.flags & OPT_VERSION)
-		return 0;
+		return EX_OK;
 
 	/* If these flags are set, length/distance are user-specified */
 	if (options.flags & OPT_LENGTH)
@@ -162,5 +163,5 @@ int main(int argc, char *argv[])
 	/* `draw_penis()' prints to stdout and returns nothing */
 	draw_penis(length, distance, flags);
 
-	return 0;
+	return EX_OK;
 }

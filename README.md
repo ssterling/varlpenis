@@ -49,6 +49,7 @@ Use any of the following when running `./configure` to control optional
 features:
 
 * `--use-color`: Enable colour support using ANSI escape codes
+* `--use-sysexits`: Use exit values from system's `sysexits.h`
 * more to come…
 
 Run `./configure --help' for info on installation paths, compilers, etc.

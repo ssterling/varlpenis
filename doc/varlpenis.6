@@ -42,7 +42,11 @@ Print version information and exit.
 .El
 .Sh EXIT STATUS
 .Nm
-exits with 0 on success, and >0 if an error occurs.
+exits with 0 on success, and >0 if an error occurs.  If compiled with
+.Dv -DVP_USE_SYSEXITS ,
+codes from
+.xr sysexits 3
+are used instead.
 .Sh STANDARDS
 .St -ansiC
 .Sh AUTHORS

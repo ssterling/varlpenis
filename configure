@@ -41,6 +41,7 @@ ifndef_guards="yes"
 
 # Default feature values
 use_color="no"
+use_sysexits="no"
 
 ###########################################################
 # PARSE OPTIONS
@@ -120,6 +121,7 @@ Installation directories:
 
 Optional features (using --use-FEATURE [all are off by default]):
   color               Enable colour support using ANSI escape codes
+  sysexits            Exit with values from system's \`sysexits.h'
 
 Environment variables:
   CC                  C compiler command [ auto-detected ]
@@ -273,6 +275,29 @@ else
 	exit 1
 fi
 
+# Check for `sysexits.h'
+if test "$use_sysexits" = "yes"; then
+	test "$is_quiet" = "no" &&
+	  echo -n "Checking for \`sysexits.h'... "
+	cat >conftest.c <<_EOF
+#include <sysexits.h>
+
+int main() { return EX_OK; }
+_EOF
+	(eval $CC $CFLAGS conftest.c -o conftest) 2>conftest.err
+	rm -f conftest.o conftest.c conftest
+	if test ! -s conftest.err; then
+		test "$is_quiet" = "no" && echo "found."
+		rm -f conftest.err
+	else
+		test "$is_quiet" = "no" && echo "not found."
+		echo "$log_e: \`sysexits.h' does not work as expected." >&2
+		echo "$log_e: Specify a valid include dir in your CFLAGS with "\
+		     "\`CFLAGS=-I/path/to/dir' when running this script." >&2
+		exit 1
+	fi
+fi
+
 # Generate `$CFLAGS' based on what the user specified
 test "$is_verbose" = "yes" &&
   echo -n "Computing CFLAGS... "
@@ -286,6 +311,8 @@ test "$is_verbose" = "yes" &&
 feature_CFLAGS=""
 test "$use_color" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR"
+test "$use_sysexits" = "yes" &&
+  feature_CFLAGS="$feature_CFLAGS -DVP_USE_SYSEXITS"
 test "$is_verbose" = "yes" && echo "done."
 
 # =============
