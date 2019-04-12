@@ -12,6 +12,10 @@
 #include <time.h>
 #include <unistd.h>
 
+#ifdef VP_USE_POSIXTIME
+#include <sys/time.h>
+#endif /* VP_USE_POSIXTIME */
+
 #include "draw.h"
 #include "options.h"
 #include "strings.h"
@@ -26,16 +30,27 @@ int main(int argc, char *argv[])
 	/* Stuff for getopt */
 	int index;
 	int ch;
+
+#ifdef VP_USE_POSIXTIME
+	struct timeval current_time;
+#endif /* VP_USE_POSIXTIME */
 	
 	/* Seed random number generator */
+#ifdef VP_USE_POSIXTIME
+	gettimeofday(&current_time, NULL);
+	srand((unsigned)current_time.tv_usec);
+#else /* VP_USE_POSIXTIME */
 	srand((unsigned)time(NULL));
+#endif /* VP_USE_POSIXTIME */
 	
 	/* Initialise length and distance to random numbers, override-able
 	 * via program arguments */
 	length =
-	  rand() % (RAND_LENGTH_MAX - RAND_LENGTH_MIN) + RAND_LENGTH_MIN;
+	  (rand() / 100) % (RAND_LENGTH_MAX - RAND_LENGTH_MIN)
+	  + RAND_LENGTH_MIN;
 	distance =
-	  rand() % (RAND_DISTANCE_MAX - RAND_DISTANCE_MIN) + RAND_DISTANCE_MIN;
+	  (rand() / 100) % (RAND_DISTANCE_MAX - RAND_DISTANCE_MIN)
+	  + RAND_DISTANCE_MIN;
 
 	flags = NO_FLAGS;
 

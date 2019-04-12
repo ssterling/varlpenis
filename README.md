@@ -50,6 +50,7 @@ features:
 
 * `--use-color`: Enable colour support using ANSI escape codes
 * `--use-sysexits`: Use exit values from system's `sysexits.h`
+* `--use-posixtime`: Use higher-resolution time for better random numbers
 * more to come…
 
 Run `./configure --help' for info on installation paths, compilers, etc.

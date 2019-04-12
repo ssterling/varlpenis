@@ -42,6 +42,7 @@ ifndef_guards="yes"
 # Default feature values
 use_color="no"
 use_sysexits="no"
+use_posixtime="no"
 
 ###########################################################
 # PARSE OPTIONS
@@ -121,6 +122,7 @@ Installation directories:
 
 Optional features (using --use-FEATURE [all are off by default]):
   color               Enable colour support using ANSI escape codes
+  posixtime           Use higher-resolution time for better random numbers
   sysexits            Exit with values from system's \`sysexits.h'
 
 Environment variables:
@@ -298,6 +300,29 @@ _EOF
 	fi
 fi
 
+# Check for POSIX `sys/time.h'
+if test "$use_posixtime" = "yes"; then
+	test "$is_quiet" = "no" &&
+	  echo -n "Checking for POSIX \`sys/time.h'... "
+	cat >conftest.c <<_EOF
+#include <sys/time.h>
+
+int main() { return 0; }
+_EOF
+	(eval $CC $CFLAGS conftest.c -o conftest) 2>conftest.err
+	rm -f conftest.o conftest.c conftest
+	if test ! -s conftest.err; then
+		test "$is_quiet" = "no" && echo "found."
+		rm -f conftest.err
+	else
+		test "$is_quiet" = "no" && echo "not found."
+		echo "$log_e: POSIX library is not properly implemented." >&2
+		echo "$log_e: Specify a valid include dir in your CFLAGS with "\
+		     "\`CFLAGS=-I/path/to/dir' when running this script." >&2
+		exit 1
+	fi
+fi
+
 # Generate `$CFLAGS' based on what the user specified
 test "$is_verbose" = "yes" &&
   echo -n "Computing CFLAGS... "
@@ -313,6 +338,8 @@ test "$use_color" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR"
 test "$use_sysexits" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_SYSEXITS"
+test "$use_posixtime" = "yes" &&
+  feature_CFLAGS="$feature_CFLAGS -DVP_USE_POSIXTIME"
 test "$is_verbose" = "yes" && echo "done."
 
 # =============
