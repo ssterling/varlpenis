@@ -6,6 +6,8 @@
  */
 
 #include <ctype.h>
+#include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,6 +32,9 @@ int main(int argc, char *argv[])
 	/* Stuff for getopt */
 	int index;
 	int ch;
+
+	/* For the `strtol()` shenanigans below */
+	long int strtol_tmp;
 
 #ifdef VP_USE_POSIXTIME
 	struct timeval current_time;
@@ -73,25 +78,41 @@ int main(int argc, char *argv[])
 				break;
 #endif /* VP_USE_COLOR */
 			case 'e':
-				if (atoi(optarg) < 1) {
+				errno = 0;
+				strtol_tmp = 0;
+				strtol_tmp = strtol(optarg, NULL, 0);
+				if ((strtol_tmp == LONG_MAX && errno == ERANGE)
+				    || (strtol_tmp > UINT_MAX)) {
+					options.error_code = ERR_BIGUINT;
+					options.error_char = 'e';
+					goto BREAK_FROM_GETOPT;
+				} else if (strtol_tmp < 1) {
 					options.error_code = ERR_NOTINT;
 					options.error_char = 'e';
 					goto BREAK_FROM_GETOPT;
 				}
 				options.flags |= OPT_DISTANCE;
-				options.distance = (unsigned)atoi(optarg);
+				options.distance = (unsigned int)strtol_tmp;
 				break;
 			case 'h':
 				options.flags |= OPT_HELP;
 				break;
 			case 'l':
-				if (atoi(optarg) < 1) {
+				errno = 0;
+				strtol_tmp = 0;
+				strtol_tmp = strtol(optarg, NULL, 0);
+				if ((strtol_tmp == LONG_MAX && errno == ERANGE)
+				    || (strtol_tmp > UINT_MAX)) {
+					options.error_code = ERR_BIGUINT;
+					options.error_char = 'l';
+					goto BREAK_FROM_GETOPT;
+				} else if (strtol_tmp < 1) {
 					options.error_code = ERR_NOTINT;
 					options.error_char = 'l';
 					goto BREAK_FROM_GETOPT;
 				}
 				options.flags |= OPT_LENGTH;
-				options.length = (unsigned)atoi(optarg);
+				options.distance = (unsigned int)strtol_tmp;
 				break;
 			case 'v':
 				options.flags |= OPT_VERSION;
@@ -122,6 +143,11 @@ int main(int argc, char *argv[])
 		case ERR_NOTINT:
 			fprintf(stderr, "Error: argument to option `-%c' "
 			                "must be a positive integer\n",
+			                options.error_char);
+			return EX_USAGE;
+		case ERR_BIGUINT:
+			fprintf(stderr, "Error: argument to option `-%c' "
+			                "is too large (above `UINT_MAX').\n",
 			                options.error_char);
 			return EX_USAGE;
 		case ERR_UNKNOWNCHAR:

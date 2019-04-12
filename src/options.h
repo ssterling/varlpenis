@@ -20,7 +20,8 @@ enum OPTIONS_ERROR_E {
 	ERR_OK          = 0,
 	ERR_NOARG       = 1,
 	ERR_NOTINT      = 2,
-	ERR_UNKNOWNCHAR = 3
+	ERR_UNKNOWNCHAR = 3,
+	ERR_BIGUINT     = 4
 };
 
 struct OPTIONS_S {
