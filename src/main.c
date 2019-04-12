@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 					goto BREAK_FROM_GETOPT;
 				}
 				options.flags |= OPT_LENGTH;
-				options.distance = (unsigned int)strtol_tmp;
+				options.length = (unsigned int)strtol_tmp;
 				break;
 			case 'v':
 				options.flags |= OPT_VERSION;
