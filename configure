@@ -235,11 +235,13 @@ fi
 test "$is_quiet" = "no" &&
   echo -n "Checking for C89 standard library headers... "
 cat >conftest.c <<_EOF
+#include <ctype.h>
+#include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <ctype.h>
 
 int main() { return 0; }
 _EOF
