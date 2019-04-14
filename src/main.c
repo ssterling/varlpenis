@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 	 * included in the `if' blocks, calling `varlpenis -vh' would print
 	 * version info and exit before printing the help message. */
 	if (options.flags & OPT_VERSION)
-		printf("%1$s v%2$s - %3$s\n%4$s\n",
+		printf("%s v%s - %s\n%s\n",
 		       VP_PROGRAM_NAME, VP_VERSION_STR, VP_PROGRAM_DESC,
 		       VP_COPYRIGHT);
 	if (options.flags & OPT_HELP)
