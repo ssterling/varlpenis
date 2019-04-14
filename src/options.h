@@ -27,14 +27,14 @@ enum OPTIONS_ERROR_E {
 struct OPTIONS_S {
 	enum OPTIONS_E flags;
 
-	/* Only evaluated for error-handling */
-	enum OPTIONS_ERROR_E error_code;
-	char error_char;
-
 	/* If the LENGTH and/or DISTANCE flags are set, `main()' will use
 	 * the respective of these numbers instead of a random value */
 	unsigned int length;
 	unsigned int distance;
+
+	/* Only evaluated for error-handling */
+	enum OPTIONS_ERROR_E error_code;
+	char error_char;
 };
 
 #endif /* ! VP_OPTIONS_H */
