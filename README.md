@@ -53,7 +53,7 @@ features:
 * `--use-posixtime`: Use higher-resolution time for better random numbers
 * more to come…
 
-Run `./configure --help' for info on installation paths, compilers, etc.
+Run `./configure --help` for info on installation paths, compilers, etc.
 
 Some notes
 ----------
