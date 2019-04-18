@@ -148,7 +148,7 @@ fi
 test "$is_verbose" = "yes" && echo "Entering verbose mode."
 
 # Check whether PWD is usable
-test "$is_verbose" = "$yes" &&
+test "$is_verbose" = "yes" &&
   echo -n "Checking whether PWD is read-/write-able... "
 cs_pwd=`pwd` && test -n $cs_pwd &&
 ls_di=`ls -di .` &&
