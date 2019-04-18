@@ -59,31 +59,31 @@ fi
 for arg in "$@"; do
 	case $arg in
 		--bindir=*)
-			us_bindir=`echo $arg | sed 's/--bindir=//'`
+			us_bindir=`echo "$arg" | sed 's/--bindir=//'`
 			;;
 		--datadir=*)
-			us_datadir=`echo $arg | sed 's/--datadir=//'`
+			us_datadir=`echo "$arg" | sed 's/--datadir=//'`
 			;;
 		--help | -help | -h | --h)
 			helpme="yes"
 			;;
 		--mandir=*)
-			us_mandir=`echo $arg | sed 's/--mandir=//'`
+			us_mandir=`echo "$arg" | sed 's/--mandir=//'`
 			;;
 		--no-ifndef-guards)
 			ifndef_guards="no"
 			;;
 		--prefix=*)
-			us_prefix=`echo $arg | sed 's/--prefix=//'`
+			us_prefix=`echo "$arg" | sed 's/--prefix=//'`
 			;;
 		--quiet | -q)
 			is_quiet="yes"
 			;;
 		--srcdir=*)
-			us_srcdir=`echo $arg | sed 's/--srcdir=//'`
+			us_srcdir=`echo "$arg" | sed 's/--srcdir=//'`
 			;;
 		--use-*)
-			feature=`echo $arg | sed 's/--use-//; s/[-.]/_/'`
+			feature=`echo "$arg" | sed 's/--use-//; s/[-.]/_/'`
 			# If the feature variable isn't already initialised to
 			# a default value up above, it (probably) doesn't exist
 			if eval test -n \"\$use_$feature\"; then
@@ -158,7 +158,7 @@ test "$is_verbose" = "yes" && echo "Entering verbose mode."
 # Check whether PWD is usable
 test "$is_verbose" = "yes" &&
   echo $n "Checking whether PWD is read-/write-able... "
-cs_pwd=`pwd` && test -n $cs_pwd &&
+cs_pwd=`pwd` && test -n "$cs_pwd" &&
 ls_di=`ls -di .` &&
 pwd_ls_di=`cd "$cd_pwd" && ls -di .` ||
 {
