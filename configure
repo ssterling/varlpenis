@@ -44,11 +44,19 @@ use_color="no"
 use_sysexits="no"
 use_posixtime="no"
 
+# Check whether shell/system `echo' supports flags
+if test "`echo -n`" = "-n"; then
+	n=""
+else
+	# $n expands to this in `echo $n`, removing the newline
+	n="-n"
+fi
+
 ###########################################################
 # PARSE OPTIONS
 
 # The `us_' variables are left undefined unless specified as options
-for arg in $@; do
+for arg in "$@"; do
 	case $arg in
 		--bindir=*)
 			us_bindir=`echo $arg | sed 's/--bindir=//'`
@@ -149,7 +157,7 @@ test "$is_verbose" = "yes" && echo "Entering verbose mode."
 
 # Check whether PWD is usable
 test "$is_verbose" = "yes" &&
-  echo -n "Checking whether PWD is read-/write-able... "
+  echo $n "Checking whether PWD is read-/write-able... "
 cs_pwd=`pwd` && test -n $cs_pwd &&
 ls_di=`ls -di .` &&
 pwd_ls_di=`cd "$cd_pwd" && ls -di .` ||
@@ -187,12 +195,12 @@ else
 	# In verbose mode, "Checking for..." displays each iteration;
 	# otherwise, just show this catch-all message
 	test "$is_quiet" = "no" && test "$is_verbose" = "no" &&
-	  echo -n "Checking for a valid compiler... "
+	  echo $n "Checking for a valid compiler... "
 
 	# XXX There has to be a more elegant way to do this
 	while true; do
 		test "$is_verbose" = "yes" &&
-		  echo -n "Checking for Clang toolkit... "
+		  echo $n "Checking for Clang toolkit... "
 		if command -v clang >/dev/null 2>&1; then
 			test "$is_quiet" = "no" && echo "found."
 			CC="clang"
@@ -202,7 +210,7 @@ else
 		fi
 
 		test "$is_verbose" = "yes" &&
-		  echo -n "Checking for GNU toolkit... "
+		  echo $n "Checking for GNU toolkit... "
 		if command -v gcc >/dev/null 2>&1; then
 			test "$is_quiet" = "no" && echo "found."
 			CC="gcc"
@@ -213,7 +221,7 @@ else
 
 		# XXX probably dangerous
 		test "$is_verbose" = "yes" &&
-		  echo -n "Checking for something named \`cc'... "
+		  echo $n "Checking for something named \`cc'... "
 		if command -v cc >/dev/null 2>&1; then
 			test "$is_quiet" = "no" && echo "found."
 			CC="cc"
@@ -233,7 +241,7 @@ fi
 
 # Check for C standard library (at least those used in the program)
 test "$is_quiet" = "no" &&
-  echo -n "Checking for C89 standard library headers... "
+  echo $n "Checking for C89 standard library headers... "
 cat >conftest.c <<_EOF
 #include <ctype.h>
 #include <errno.h>
@@ -260,7 +268,7 @@ fi
 
 # Check for POSIX standard library
 test "$is_quiet" = "no" &&
-  echo -n "Checking for POSIX standard library headers... "
+  echo $n "Checking for POSIX standard library headers... "
 cat >conftest.c <<_EOF
 #include <unistd.h>
 
@@ -282,7 +290,7 @@ fi
 # Check for `sysexits.h'
 if test "$use_sysexits" = "yes"; then
 	test "$is_quiet" = "no" &&
-	  echo -n "Checking for \`sysexits.h'... "
+	  echo $n "Checking for \`sysexits.h'... "
 	cat >conftest.c <<_EOF
 #include <sysexits.h>
 
@@ -305,7 +313,7 @@ fi
 # Check for POSIX `sys/time.h'
 if test "$use_posixtime" = "yes"; then
 	test "$is_quiet" = "no" &&
-	  echo -n "Checking for POSIX \`sys/time.h'... "
+	  echo $n "Checking for POSIX \`sys/time.h'... "
 	cat >conftest.c <<_EOF
 #include <sys/time.h>
 
@@ -327,14 +335,14 @@ fi
 
 # Generate `$CFLAGS' based on what the user specified
 test "$is_verbose" = "yes" &&
-  echo -n "Computing CFLAGS... "
+  echo $n "Computing CFLAGS... "
 test -z "$CFLAGS" && CFLAGS=""
 CFLAGS="$CFLAGS $default_CFLAGS"
 test "$is_verbose" = "yes" && echo "done."
 
 # Generate `$feature_flags` based on `--use-FEATURE` variables
 test "$is_verbose" = "yes" &&
-  echo -n "Computing feature CFLAGS... "
+  echo $n "Computing feature CFLAGS... "
 feature_CFLAGS=""
 test "$use_color" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR"
@@ -347,7 +355,7 @@ test "$is_verbose" = "yes" && echo "done."
 # =============
 
 test "$is_quiet" = "no" &&
-  echo -n "Generating Makefile... "
+  echo $n "Generating Makefile... "
 
 cat >Makefile <<_EOF
 ## Makefile for varlpenis
@@ -406,7 +414,7 @@ cat Makefile.in >> Makefile
 test "$is_quiet" = "no" && echo "done."
 
 test "$is_quiet" = "no" &&
-  echo -n "Generating \`check.sh'... "
+  echo $n "Generating \`check.sh'... "
 cat >check.sh <<_EOF
 #!/bin/sh
 test -f ./varlpenis || { echo "not found"; exit 1; }
