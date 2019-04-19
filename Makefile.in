@@ -10,10 +10,7 @@
 #      BSD `install'.
 
 # undocumented
-CFLAGS_DEBUG = -Wall -Wextra -Wshadow -Wformat -Wconversion -Wundef -Wno-unused \
-	       -Wconditional-uninitialized -Wmissing-variable-declarations \
-	       -Wmissing-prototypes -Wstrict-prototypes \
-	       -g -O0 -std=c89 -pedantic
+DEBUG_CFLAGS = -g -O0 -std=c89 -pedantic # works with Clang
 
 C_FILES = ${SRCDIR}/main.c ${SRCDIR}/draw.c
 
