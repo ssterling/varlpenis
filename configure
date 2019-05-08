@@ -237,6 +237,7 @@ else
 		     "running this script." >&2
 		exit 1
 	done
+	test "$is_verbose" = "yes" && echo "CC: $CC"
 fi
 
 # Check for C standard library (at least those used in the program)
@@ -339,6 +340,8 @@ test "$is_verbose" = "yes" &&
 test -z "$CFLAGS" && CFLAGS=""
 CFLAGS="$CFLAGS $default_CFLAGS"
 test "$is_verbose" = "yes" && echo "done."
+test "$is_verbose" = "yes" && test -n "$CFLAGS" &&
+  echo "CFLAGS: $CFLAGS"
 
 # Generate `$feature_flags` based on `--use-FEATURE` variables
 test "$is_verbose" = "yes" &&
@@ -351,6 +354,8 @@ test "$use_sysexits" = "yes" &&
 test "$use_posixtime" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_POSIXTIME"
 test "$is_verbose" = "yes" && echo "done."
+test "$is_verbose" = "yes" && test -n "$feature_CFLAGS" &&
+  echo "FEATURE_CFLAGS: $feature_CFLAGS"
 
 # =============
 
