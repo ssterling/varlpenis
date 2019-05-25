@@ -36,7 +36,7 @@ static char *repeat_char(const char ch, unsigned int count)
 void draw_penis(const unsigned int length, const unsigned int distance,
                 const enum DRAW_FLAGS_E flags)
 {
-#ifdef VP_USE_COLOR
+#ifdef VP_USE_COLOR_ANSI
 	if (flags & COLOR)
 		printf("%s%c%s%s%s%c%s%s%s\n",
 		       SCROTUM_COLOR_ANSI, SCROTUM_CHAR,
@@ -48,9 +48,9 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 		printf("%c%s%c%s\n",
 		       SCROTUM_CHAR, repeat_char(SHAFT_CHAR, length),
 		       HEAD_CHAR, repeat_char(EJAC_CHAR, distance));
-#else /* VP_USE_COLOR */
+#else /* VP_USE_COLOR_ANSI */
 	printf("%c%s%c%s\n",
 	       SCROTUM_CHAR, repeat_char(SHAFT_CHAR, length),
 	       HEAD_CHAR, repeat_char(EJAC_CHAR, distance));
-#endif /* VP_USE_COLOR */
+#endif /* VP_USE_COLOR_ANSI */
 }
