@@ -13,19 +13,21 @@
 
 /* Just in case it wasn't already explicitly defined,
  * `VP_USE_COLOR_<type>' should implicitly define `VP_USE_COLOR' */
-#if defined VP_USE_COLOR_ANSI && !defined VP_USE_COLOR
+#if (defined VP_USE_COLOR_ANSI || defined VP_USE_COLOR_WOE32) && \
+  !defined VP_USE_COLOR
 #warning `VP_USE_COLOR_<type>' is defined, but not `VP_USE_COLOR'; \
 	`VP_USE_COLOR' will be implicitly defined for now
 #define VP_USE_COLOR
-#endif /* VP_USE_COLOR_ANSI && ! VP_USE_COLOR */
+#endif /* VP_USE_COLOR_<type> && ! VP_USE_COLOR */
 
 /* And, if for some reason, `VP_USE_COLOR` is defined but no
  * `VP_USE_COLOR_<type>', throw an error */
-#if defined VP_USE_COLOR && !defined VP_USE_COLOR_ANSI
+#if defined VP_USE_COLOR && \
+  !(defined VP_USE_COLOR_ANSI || defined VP_USE_COLOR_WOE32)
 #warning `VP_USE_COLOR' is defined but no `VP_USE_COLOR_<type>'; \
 	assuming `VP_USE_COLOR_ANSI'
 #define VP_USE_COLOR_ANSI
-#endif /* VP_USE_COLOR && ! VP_USE_COLOR_ANSI */
+#endif /* VP_USE_COLOR && ! VP_USE_COLOR_<type> */
 
 #define LENGTH_MIN          1
 #define LENGTH_MAX          RAND_MAX
@@ -50,6 +52,13 @@
 #define EJAC_COLOR_ANSI     "\33[1m\33[37m" /* bright white */
 #define RESET_CODE_ANSI     "\33[0m"
 #endif /* VP_USE_COLOR_ANSI */
+
+#ifdef VP_USE_COLOR_WOE32
+#define SCROTUM_COLOR_WOE32 6  /* yellow */
+#define SHAFT_COLOR_WOE32   14 /* bright yellow */
+#define HEAD_COLOR_WOE32    12 /* bright red */
+#define EJAC_COLOR_WOE32    15 /* bright white */
+#endif /* VP_USE_COLOR_WOE32 */
 
 /* To avoid changing numbers in potential future expansion,
  * all flags will be compiled regardless of enabled features */
