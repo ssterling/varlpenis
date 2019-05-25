@@ -48,7 +48,7 @@ else.  Written in ANSI C using only the standard library.
 Use any of the following when running `./configure` to control optional
 features:
 
-* `--use-color`: Enable colour support using ANSI escape codes
+* `--use-color-ansi`: Enable colour support using ANSI escape codes
 * `--use-sysexits`: Use exit values from system's `sysexits.h`
 * `--use-posixtime`: Use higher-resolution time for better random numbers
 * more to come…

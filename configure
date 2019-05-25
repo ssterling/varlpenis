@@ -41,6 +41,7 @@ ifndef_guards="yes"
 
 # Default feature values
 use_color="no"
+use_color_ansi="no"
 use_sysexits="no"
 use_posixtime="no"
 
@@ -117,7 +118,7 @@ To assign environment variables (e.g. CC, CFLAGS), specify them with
 
 Script configuration:
   -h, --help          Display this message and exit
-  -q, --quiet         Do not print \'Checking...' messages
+  -q, --quiet         Do not print \`Checking...' messages
   -v, --verbose       Be verbose in saying what's going on
       --srcdir=DIR    Find the source files in directory DIR
 
@@ -129,7 +130,7 @@ Installation directories:
   --no-ifndef-guards  Ignore environment variables for installation dirs
 
 Optional features (using --use-FEATURE [all are off by default]):
-  color               Enable colour support using ANSI escape codes
+  color-ansi          Enable color output using ANSI escape codes
   posixtime           Use higher-resolution time for better random numbers
   sysexits            Exit with values from system's \`sysexits.h'
 
@@ -343,12 +344,24 @@ test "$is_verbose" = "yes" && echo "done."
 test "$is_verbose" = "yes" && test -n "$CFLAGS" &&
   echo "CFLAGS: $CFLAGS"
 
+# Alias old `--use-color' to new `--use-color-ansi'
+if test "$use_color" = "yes" && test "$use_color_ansi" = "no"; then
+	echo "$log_w: \`--use-color' is now deprecated; use \`--use-color-ansi'"
+	use_color_ansi="yes"
+fi
+
+# If `--use-color-<type>' is specified, implicitly enable `color' feature
+test "$use_color_ansi" = "yes" && test "$use_color" = "no" &&
+  use_color="true"
+
 # Generate `$feature_flags` based on `--use-FEATURE` variables
 test "$is_verbose" = "yes" &&
   echo $n "Computing feature CFLAGS... "
 feature_CFLAGS=""
 test "$use_color" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR"
+test "$use_color_ansi" = "yes" &&
+  feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR_ANSI"
 test "$use_sysexits" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_SYSEXITS"
 test "$use_posixtime" = "yes" &&
