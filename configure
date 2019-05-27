@@ -42,6 +42,7 @@ ifndef_guards="yes"
 # Default feature values
 use_color="no"
 use_color_ansi="no"
+use_color_woe32="no"
 use_sysexits="no"
 use_posixtime="no"
 
@@ -131,6 +132,7 @@ Installation directories:
 
 Optional features (using --use-FEATURE [all are off by default]):
   color-ansi          Enable color output using ANSI escape codes
+       -woe32          ... using Windows Console API commands
   posixtime           Use higher-resolution time for better random numbers
   sysexits            Exit with values from system's \`sysexits.h'
 
@@ -362,6 +364,8 @@ test "$use_color" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR"
 test "$use_color_ansi" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR_ANSI"
+test "$use_color_woe32" = "yes" &&
+  feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR_WOE32"
 test "$use_sysexits" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_SYSEXITS"
 test "$use_posixtime" = "yes" &&
