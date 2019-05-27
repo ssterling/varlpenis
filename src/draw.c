@@ -11,9 +11,9 @@
 
 #include "draw.h"
 
-#ifdef _WIN32
+#if defined VP_USE_COLOR && defined _WIN32
 #include <windows.h>
-#endif /* _WIN32 */
+#endif /* _VP_USE_COLOR && _WIN32 */
 
 /* The `main()' function is 99% options-parsing and error-handling;
  * this file itself (and the corresponding `draw.h') can be utilised
@@ -45,7 +45,7 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 	HANDLE console;
 	CONSOLE_SCREEN_BUFFER_INFO console_info;
 	WORD original_attribs;
-#endif /* _WIN32 */
+#endif /* VP_USE_COLOR && _WIN32 */
 
 #ifdef VP_USE_COLOR_ANSI
 	if (flags & COLOR)
