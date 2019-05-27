@@ -348,7 +348,8 @@ test "$is_verbose" = "yes" && test -n "$CFLAGS" &&
 
 # Alias old `--use-color' to new `--use-color-ansi'
 if test "$use_color" = "yes" && test "$use_color_ansi" = "no"; then
-	echo "$log_w: \`--use-color' is now deprecated; use \`--use-color-ansi'"
+	test "$is_quiet" = "no" &&
+	  echo "$log_w: \`--use-color' is now deprecated; use \`--use-color-ansi'"
 	use_color_ansi="yes"
 fi
 
