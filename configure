@@ -355,7 +355,7 @@ fi
 
 # If `--use-color-<type>' is specified, implicitly enable `color' feature
 test "$use_color_ansi" = "yes" && test "$use_color" = "no" &&
-  use_color="true"
+  use_color="yes"
 
 # Generate `$feature_flags` based on `--use-FEATURE` variables
 test "$is_verbose" = "yes" &&
