@@ -170,6 +170,7 @@ test -w "$cs_pwd" ||
 	echo "$log_e: Working directory is not writeable." >&2
 	exit 1
 }
+test "$is_verbose" = "yes" && echo "yes."
 
 # Set installation directories
 for var in srcdir docdir prefix bindir datadir mandir; do
