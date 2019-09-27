@@ -19,6 +19,11 @@ static char *repeat_char(const char ch, unsigned int count)
 {
 	char *ret;
 
+	if (count == 0) {
+		ret = "\0";
+		return ret;
+	}
+
 	ret = malloc(count + 1);
 	strncpy(ret, &ch, 1);
 

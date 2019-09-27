@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 					options.error_code = ERR_BIGUINT;
 					options.error_char = 'e';
 					goto BREAK_FROM_GETOPT;
-				} else if (strtol_tmp < 1) {
+				} else if (strtol_tmp < 0) {
 					options.error_code = ERR_NOTINT;
 					options.error_char = 'e';
 					goto BREAK_FROM_GETOPT;
@@ -143,6 +143,11 @@ int main(int argc, char *argv[])
 		case ERR_NOTINT:
 			fprintf(stderr, "Error: argument to option `-%c' "
 			                "must be a positive integer\n",
+			                options.error_char);
+			return EX_USAGE;
+		case ERR_NOTINTORZERO:
+			fprintf(stderr, "Error: argument to option `-%c' "
+			                "must be zero or a positive integer\n",
 			                options.error_char);
 			return EX_USAGE;
 		case ERR_BIGUINT:
