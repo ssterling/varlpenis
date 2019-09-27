@@ -13,7 +13,7 @@
 
 #define LENGTH_MIN          1
 #define LENGTH_MAX          RAND_MAX
-#define DISTANCE_MIN        1
+#define DISTANCE_MIN        0
 #define DISTANCE_MAX        RAND_MAX
 
 /* These are arbitrary */
