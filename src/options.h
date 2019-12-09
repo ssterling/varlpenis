@@ -8,6 +8,12 @@
 #ifndef VP_OPTIONS_H
 #define VP_OPTIONS_H
 
+#ifdef VP_USE_COLOR
+#define GETOPT_OPTIONS_STRING "ce:hl:v"
+#else /* VP_USE_COLOR */
+#define GETOPT_OPTIONS_STRING "e:hl:v"
+#endif /* VP_USE_COLOR */
+
 enum OPTIONS_E {
 	NO_OPTS      = 0,
 	OPT_HELP     = 1,  /* Print help message to stdout */

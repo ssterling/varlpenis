@@ -66,11 +66,7 @@ int main(int argc, char *argv[])
 	options.error_char = '!'; /* placeholder */
 
 	opterr = 0;
-#ifdef VP_USE_COLOR
-	while ((ch = getopt(argc, argv, "ce:hl:v")) != -1)
-#else /* VP_USE_COLOR */
-	while ((ch = getopt(argc, argv, "e:hl:v")) != -1)
-#endif /* VP_USE_COLOR */
+	while ((ch = getopt(argc, argv, GETOPT_OPTIONS_STRING)) != -1)
 		switch (ch) {
 #ifdef VP_USE_COLOR
 			case 'c':
@@ -178,25 +174,20 @@ int main(int argc, char *argv[])
 		printf("%s v%s - %s\n%s\n",
 		       VP_PROGRAM_NAME, VP_VERSION_STR, VP_PROGRAM_DESC,
 		       VP_COPYRIGHT);
-	if (options.flags & OPT_HELP)
+	if (options.flags & OPT_HELP) {
+	/* XXX This is a very weird way to implement a dynamically compiled
+	       help message, but it's the only working one I could think of */
+		printf("usage: %s [options]\n"
+		       "  options:\n",
+		       VP_PROGRAM_NAME);
 #ifdef VP_USE_COLOR
-		printf("usage: %s [options]\n"
-		       "  options:\n"
-		       "    -c       output color\n"
-		       "    -e num   set length of semen string\n"
-		       "    -h       show this message\n"
-		       "    -l num   set length of shaft\n"
-		       "    -v       show copyright and version info\n",
-		       VP_PROGRAM_NAME);
-#else /* VP_USE_COLOR */
-		printf("usage: %s [options]\n"
-		       "  options:\n"
-		       "    -e num   set length of semen string\n"
-		       "    -h       show this message\n"
-		       "    -l num   set length of shaft\n"
-		       "    -v       show copyright and version info\n",
-		       VP_PROGRAM_NAME);
+		printf("    -c       output color\n");
 #endif /* VP_USE_COLOR */
+		printf("    -e num   set length of semen string\n");
+		printf("    -h       show this message\n");
+		printf("    -l num   set length of shaft\n");
+		printf("    -v       show copyright and version info\n");
+	}
 	if (options.flags & OPT_HELP || options.flags & OPT_VERSION)
 		return EX_OK;
 
