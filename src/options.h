@@ -8,10 +8,19 @@
 #ifndef VP_OPTIONS_H
 #define VP_OPTIONS_H
 
+/* TODO: find a way to clean this part up */
 #ifdef VP_USE_COLOR
-#define GETOPT_OPTIONS_STRING "ce:hl:v"
+#ifdef VP_USE_FULLWIDTH
+#define GETOPT_OPTIONS_STRING "ce:fhl:v" /* fullwidth, color */
+#else /* VP_USE_FULLWIDTH */
+#define GETOPT_OPTIONS_STRING "ce:hl:v" /* color */
+#endif /* VP_USE_FULLWIDTH */
 #else /* VP_USE_COLOR */
-#define GETOPT_OPTIONS_STRING "e:hl:v"
+#ifdef VP_USE_FULLWIDTH
+#define GETOPT_OPTIONS_STRING "e:fhl:v" /* fullwidth */
+#else /* VP_USE_FULLWIDTH */
+#define GETOPT_OPTIONS_STRING "e:hl:v" /* none */
+#endif /* VP_USE_FULLWIDTH */
 #endif /* VP_USE_COLOR */
 
 enum OPTIONS_E {

@@ -39,7 +39,8 @@
  * all flags will be compiled regardless of enabled features */
 enum DRAW_FLAGS_E {
 	NO_FLAGS = 0,
-	COLOR = 1
+	COLOR = 1,
+	FULLWIDTH = 2
 };
 
 static char *repeat_char(const char ch, unsigned int count);

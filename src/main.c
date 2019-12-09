@@ -90,6 +90,11 @@ int main(int argc, char *argv[])
 				options.flags |= OPT_DISTANCE;
 				options.distance = (unsigned int)strtol_tmp;
 				break;
+#ifdef VP_USE_FULLWIDTH
+			case 'f':
+				flags |= FULLWIDTH;
+				break;
+#endif /* VP_USE_FULLWIDTH */
 			case 'h':
 				options.flags |= OPT_HELP;
 				break;
@@ -184,6 +189,9 @@ int main(int argc, char *argv[])
 		printf("    -c       output color\n");
 #endif /* VP_USE_COLOR */
 		printf("    -e num   set length of semen string\n");
+#ifdef VP_USE_FULLWIDTH
+		printf("    -f       output fullwidth characters\n");
+#endif /* VP_USE_FULLWIDTH */
 		printf("    -h       show this message\n");
 		printf("    -l num   set length of shaft\n");
 		printf("    -v       show copyright and version info\n");
