@@ -35,6 +35,13 @@
 #define RESET_CODE_ANSI     "\33[0m"
 #endif /* VP_USE_COLOR */
 
+#ifdef VP_USE_FULLWIDTH
+#define SCROTUM_CHAR_UTF8   "８"
+#define SHAFT_CHAR_UTF8     "＝"
+#define HEAD_CHAR_UTF8      "Ｄ"
+#define EJAC_CHAR_UTF8      "～"
+#endif /* VP_USE_FULLWIDTH */
+
 /* To avoid changing numbers in potential future expansion,
  * all flags will be compiled regardless of enabled features */
 enum DRAW_FLAGS_E {
@@ -44,6 +51,9 @@ enum DRAW_FLAGS_E {
 };
 
 static char *repeat_char(const char ch, unsigned int count);
+#ifdef VP_USE_FULLWIDTH
+static char *repeat_string(const char *str, unsigned int count);
+#endif /* VP_USE_FULLWIDTH */
 void draw_penis(const unsigned int length, const unsigned int distance,
                 const enum DRAW_FLAGS_E flags);
 
