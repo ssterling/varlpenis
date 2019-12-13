@@ -41,6 +41,7 @@ ifndef_guards="yes"
 
 # Default feature values
 use_color="no"
+use_fullwidth="no"
 use_sysexits="no"
 use_posixtime="no"
 
@@ -130,6 +131,7 @@ Installation directories:
 
 Optional features (using --use-FEATURE [all are off by default]):
   color               Enable colour support using ANSI escape codes
+  fullwidth           Enable fullwidth (CJK) character output using UTF-8
   posixtime           Use higher-resolution time for better random numbers
   sysexits            Exit with values from system's \`sysexits.h'
 
@@ -350,6 +352,8 @@ test "$is_verbose" = "yes" &&
 feature_CFLAGS=""
 test "$use_color" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR"
+test "$use_fullwidth" = "yes" &&
+  feature_CFLAGS="$feature_CFLAGS -DVP_USE_FULLWIDTH"
 test "$use_sysexits" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_SYSEXITS"
 test "$use_posixtime" = "yes" &&
