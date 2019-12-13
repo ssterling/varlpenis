@@ -22,6 +22,7 @@
 #include "options.h"
 #include "strings.h"
 #include "exits.h"
+#include "i18n.h"
 
 int main(int argc, char *argv[])
 {
@@ -39,6 +40,13 @@ int main(int argc, char *argv[])
 #ifdef VP_USE_POSIXTIME
 	struct timeval current_time;
 #endif /* VP_USE_POSIXTIME */
+
+#ifdef VP_USE_GETTEXT
+	/* Get locale from environment */
+	setlocale(LC_ALL, "");
+	bindtextdomain(VP_TEXTDOMAIN, VP_LOCALE_DIR);
+	textdomain(VP_TEXTDOMAIN);
+#endif /* VP_USE_GETTEXT */
 	
 	/* Seed random number generator */
 #ifdef VP_USE_POSIXTIME
@@ -138,37 +146,37 @@ int main(int argc, char *argv[])
 		case ERR_OK:
 			break;
 		case ERR_NOARG:
-			fprintf(stderr, "Error: option `-%c' requires a "
-			                "positive integer as an argument\n",
+			fprintf(stderr, _("Error: option `-%c' requires a "
+			                  "positive integer as an argument\n"),
 					options.error_char);
 			return EX_USAGE;
 		case ERR_NOTINT:
-			fprintf(stderr, "Error: argument to option `-%c' "
-			                "must be a positive integer\n",
+			fprintf(stderr, _("Error: argument to option `-%c' "
+			                  "must be a positive integer\n"),
 			                options.error_char);
 			return EX_USAGE;
 		case ERR_NOTINTORZERO:
-			fprintf(stderr, "Error: argument to option `-%c' "
-			                "must be zero or a positive integer\n",
+			fprintf(stderr, _("Error: argument to option `-%c' "
+			                  "must be zero or a positive integer\n"),
 			                options.error_char);
 			return EX_USAGE;
 		case ERR_BIGUINT:
-			fprintf(stderr, "Error: argument to option `-%c' "
-			                "is too large (above `UINT_MAX').\n",
+			fprintf(stderr, _("Error: argument to option `-%c' "
+			                  "is too large (above `UINT_MAX').\n"),
 			                options.error_char);
 			return EX_USAGE;
 		case ERR_UNKNOWNCHAR:
 			if (isprint(options.error_char))
-				fprintf(stderr, "Error: unknown option `-%c'\n",
+				fprintf(stderr, _("Error: unknown option `-%c'\n"),
 						options.error_char);
 			else
-				fprintf(stderr, "Error: unknown option char "
-						"`\\x%x'\n",
+				fprintf(stderr, _("Error: unknown option char "
+						  "`\\x%x'\n"),
 						(int)options.error_char);
 			return EX_USAGE;
 		default:
-			fprintf(stderr, "Error: bogus error code received "
-			                "from options parser\n");
+			fprintf(stderr, _("Error: bogus error code received "
+			                  "from options parser\n"));
 			return EX_SOFTWARE;
 	}
 
@@ -183,19 +191,19 @@ int main(int argc, char *argv[])
 	if (options.flags & OPT_HELP) {
 	/* XXX This is a very weird way to implement a dynamically compiled
 	       help message, but it's the only working one I could think of */
-		printf("usage: %s [options]\n"
-		       "  options:\n",
+		printf(_("usage: %s [options]\n"
+		         "  options:\n"),
 		       VP_PROGRAM_NAME);
 #ifdef VP_USE_COLOR
-		printf("    -c       output color\n");
+		printf(_("    -c       output color\n"));
 #endif /* VP_USE_COLOR */
-		printf("    -e num   set length of semen string\n");
+		printf(_("    -e num   set length of semen string\n"));
 #ifdef VP_USE_FULLWIDTH
-		printf("    -f       output fullwidth characters\n");
+		printf(_("    -f       output fullwidth characters\n"));
 #endif /* VP_USE_FULLWIDTH */
-		printf("    -h       show this message\n");
-		printf("    -l num   set length of shaft\n");
-		printf("    -v       show copyright and version info\n");
+		printf(_("    -h       show this message\n"));
+		printf(_("    -l num   set length of shaft\n"));
+		printf(_("    -v       show copyright and version info\n"));
 	}
 	if (options.flags & OPT_HELP || options.flags & OPT_VERSION)
 		return EX_OK;
