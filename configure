@@ -22,6 +22,7 @@ default_docdir="./doc"
 default_prefix="/usr/local"
 default_bindir="\${PREFIX}/bin"
 default_datadir="\${PREFIX}/share"
+default_localedir="\${DATADIR}/locale"
 default_mandir="\${DATADIR}/man"
 
 # Default programs
@@ -42,6 +43,7 @@ ifndef_guards="yes"
 # Default feature values
 use_color="no"
 use_fullwidth="no"
+use_gettext="no"
 use_sysexits="no"
 use_posixtime="no"
 
@@ -67,6 +69,9 @@ for arg in "$@"; do
 			;;
 		--help | -help | -h | --h)
 			helpme="yes"
+			;;
+		--localedir=*)
+			us_localedir=`echo "$arg" | sed 's/--localedir=//'`
 			;;
 		--mandir=*)
 			us_mandir=`echo "$arg" | sed 's/--mandir=//'`
@@ -126,12 +131,14 @@ Installation directories:
   --prefix=DIR        Normal prefix [$default_prefix]
   --bindir=DIR        User executables [$default_bindir]
   --datadir=DIR       Read-only program data [$default_datadir]
+  --localedir=DIR     Message translations (if using) [$default_localedir]
   --mandir=DIR        UNIX manpage documentation [$default_mandir]
   --no-ifndef-guards  Ignore environment variables for installation dirs
 
 Optional features (using --use-FEATURE [all are off by default]):
   color               Enable colour support using ANSI escape codes
   fullwidth           Enable fullwidth (CJK) character output using UTF-8
+  gettext             Enable message translations using gettext
   posixtime           Use higher-resolution time for better random numbers
   sysexits            Exit with values from system's \`sysexits.h'
 
@@ -175,7 +182,7 @@ test -w "$cs_pwd" ||
 test "$is_verbose" = "yes" && echo "yes."
 
 # Set installation directories
-for var in srcdir docdir prefix bindir datadir mandir; do
+for var in srcdir docdir prefix bindir datadir localedir mandir; do
 	eval usval="\$us_$var"
 	eval defval="\$default_$var"
 	if test -n "$usval" && test ! "$usval" = "$defval"; then
@@ -291,6 +298,30 @@ else
 	exit 1
 fi
 
+# Check for libintl (gettext)
+if test "$use_gettext" = "yes"; then
+	test "$is_quiet" = "no" &&
+	  echo $n "Checking for libintl (gettext)... "
+	cat >conftest.c <<_EOF
+#include <libintl.h>
+#include <locale.h>
+
+int main() { return 0; }
+_EOF
+	(eval $CC $CFLAGS conftest.c -o conftest) 2>conftest.err
+	rm -f conftest.o conftest.c conftest
+	if test ! -s conftest.err; then
+		test "$is_quiet" = "no" && echo "found."
+		rm -f conftest.err
+	else
+		test "$is_quiet" = "no" && echo "not found."
+		echo "$log_e: libintl is not properly implemented." >&2
+		echo "$log_e: Specify a valid include dir in your CFLAGS with "\
+		     "\`CFLAGS=-I/path/to/dir' when running this script." >&2
+		exit 1
+	fi
+fi
+
 # Check for `sysexits.h'
 if test "$use_sysexits" = "yes"; then
 	test "$is_quiet" = "no" &&
@@ -354,6 +385,10 @@ test "$use_color" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR"
 test "$use_fullwidth" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_FULLWIDTH"
+test "$use_gettext" = "yes" &&
+  feature_CFLAGS="$feature_CFLAGS -DVP_USE_GETTEXT -lintl"
+test "$use_gettext" = "yes" && test -n "$localedir" &&
+  feature_CFLAGS="$feature_CFLAGS -DVP_LOCALE_DIR=\\\"\${LOCALEDIR}\\\""
 test "$use_sysexits" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_SYSEXITS"
 test "$use_posixtime" = "yes" &&
@@ -388,6 +423,13 @@ INSTALL_DIR=\${INSTALL} -d -m 755
 INSTALL_PROGRAM=\${INSTALL} -m 755
 INSTALL_PROGRAM_STRIP=\${INSTALL_PROGRAM} -s
 INSTALL_DATA=\${INSTALL} -m 644
+_EOF
+	if test "$use_gettext" = "yes"; then
+		cat >>Makefile <<_EOF
+INSTALL_LOCALE=\${INSTALL} -m 644
+_EOF
+	fi
+	cat >>Makefile <<_EOF
 INSTALL_MAN=\${INSTALL} -m 644
 
 # Installation directories
@@ -399,8 +441,14 @@ if test "$ifndef_guards" = "no"; then
 PREFIX=$prefix
 BINDIR=$bindir
 DATADIR=$datadir
+_EOF
+	if test "$use_gettext" = "yes"; then
+		cat >>Makefile <<_EOF
+LOCALEDIR=$localedir
+_EOF
+	fi
+	cat >>Makefile <<_EOF
 MANDIR=$mandir
-
 _EOF
 else
 	cat >>Makefile <<_EOF
@@ -413,6 +461,15 @@ BINDIR=$bindir
 .ifndef DATADIR
 DATADIR=$datadir
 .endif
+_EOF
+	if test "$use_gettext" = "yes"; then
+		cat >>Makefile <<_EOF
+.ifndef LOCALEDIR
+LOCALEDIR=$localedir
+.endif
+_EOF
+	fi
+	cat >>Makefile <<_EOF
 .ifndef MANDIR
 MANDIR=$mandir
 .endif
