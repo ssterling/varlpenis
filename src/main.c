@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
 				flags |= COLOR;
 				break;
 #endif /* VP_USE_COLOR */
+			case 'd': /* Undocumented alias for `-e' */
 			case 'e':
 				errno = 0;
 				strtol_tmp = 0;
