@@ -1,4 +1,4 @@
-.Dd September 25, 2019
+.Dd December 12, 2019
 .Dt VARLPENIS 6
 .Os
 .Sh NAME
@@ -6,7 +6,7 @@
 .Nd generate ASCII-art penis of arbitrary length
 .Sh SYNOPSIS
 .Nm
-.Op Fl chv
+.Op Fl cfhv
 .Op Fl e Ar distance
 .Op Fl l Ar length
 .Sh DESCRIPTION
@@ -27,6 +27,9 @@ number of
 ~
 .Sc
 (tilde).
+.It Fl f
+Print fullwidth characters using UTF-8.  Only available if compiled with
+.Dv VP_USE_FULLWIDTH .
 .It Fl h
 Print help message and exit.
 .It Fl l Ar length
