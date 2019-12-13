@@ -13,27 +13,8 @@
 
 /* The `main()' function is 99% options-parsing and error-handling;
  * this file itself (and the corresponding `draw.h') can be utilised
- * independently inside another program or whatnot if desired */
+ * independently inside another program or whatnot if desired. */
 
-static char *repeat_char(const char ch, unsigned int count)
-{
-	char *ret;
-
-	if (count == 0) {
-		ret = "\0";
-		return ret;
-	}
-
-	ret = malloc(count + 1);
-	strncpy(ret, &ch, 1);
-
-	while (--count > 0)
-		strncat(ret, &ch, 1);
-
-	return ret;
-}
-
-#ifdef VP_USE_FULLWIDTH
 static char *repeat_string(const char *str, unsigned int count)
 {
 	char *ret;
@@ -54,7 +35,6 @@ static char *repeat_string(const char *str, unsigned int count)
 
 	return ret;
 }
-#endif /* VP_USE_FULLWIDTH */
 
 void draw_penis(const unsigned int length, const unsigned int distance,
                 const enum DRAW_FLAGS_E flags)
@@ -85,19 +65,21 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 
 #ifdef VP_USE_COLOR
 	if (flags & COLOR) {
-		printf("%s%c%s%s%s%c%s%s%s\n",
+		printf("%s%s%s%s%s%s%s%s%s\n",
 		       SCROTUM_COLOR_ANSI, SCROTUM_CHAR,
-		       SHAFT_COLOR_ANSI, repeat_char(SHAFT_CHAR, length),
+		       SHAFT_COLOR_ANSI,
+		       repeat_string(SHAFT_CHAR, length),
 		       HEAD_COLOR_ANSI, HEAD_CHAR,
-		       EJAC_COLOR_ANSI, repeat_char(EJAC_CHAR, distance),
+		       EJAC_COLOR_ANSI,
+		       repeat_string(EJAC_CHAR, distance),
 		       RESET_CODE_ANSI);
 		return;
 	}
 #endif /* VP_USE_COLOR */
 
 	/* No flags */
-	printf("%c%s%c%s\n",
-	       SCROTUM_CHAR, repeat_char(SHAFT_CHAR, length),
-	       HEAD_CHAR, repeat_char(EJAC_CHAR, distance));
+	printf("%s%s%s%s\n",
+	       SCROTUM_CHAR, repeat_string(SHAFT_CHAR, length),
+	       HEAD_CHAR, repeat_string(EJAC_CHAR, distance));
 	return;
 }

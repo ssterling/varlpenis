@@ -22,10 +22,10 @@
 #define RAND_DISTANCE_MIN   DISTANCE_MIN
 #define RAND_DISTANCE_MAX   12
 
-#define SCROTUM_CHAR        '8'
-#define SHAFT_CHAR          '='
-#define HEAD_CHAR           'D'
-#define EJAC_CHAR           '~'
+#define SCROTUM_CHAR        "8"
+#define SHAFT_CHAR          "="
+#define HEAD_CHAR           "D"
+#define EJAC_CHAR           "~"
 
 #ifdef VP_USE_COLOR
 #define SCROTUM_COLOR_ANSI  "\33[33m"       /* yellow */
@@ -50,10 +50,7 @@ enum DRAW_FLAGS_E {
 	FULLWIDTH = 2
 };
 
-static char *repeat_char(const char ch, unsigned int count);
-#ifdef VP_USE_FULLWIDTH
 static char *repeat_string(const char *str, unsigned int count);
-#endif /* VP_USE_FULLWIDTH */
 void draw_penis(const unsigned int length, const unsigned int distance,
                 const enum DRAW_FLAGS_E flags);
 
