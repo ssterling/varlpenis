@@ -12,6 +12,7 @@ usage: varlpenis [options]
   options:
     -c       output color
     -e num   set length of semen string
+    -f       output fullwidth characters
     -h       show this message
     -l num   set length of shaft
     -v       show version and copyright info
@@ -49,8 +50,10 @@ Use any of the following when running `./configure` to control optional
 features:
 
 * `--use-color`: Enable colour support using ANSI escape codes
-* `--use-sysexits`: Use exit values from system's `sysexits.h`
+* `--use-fullwidth`: Enable fullwidth (CJK) character output using UTF-8
+* `--use-gettext`: Enable message translations using gettext
 * `--use-posixtime`: Use higher-resolution time for better random numbers
+* `--use-sysexits`: Use exit values from system's `sysexits.h`
 * more to come…
 
 Run `./configure --help` for info on installation paths, compilers, etc.
