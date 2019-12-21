@@ -1,0 +1,95 @@
+# Translation file for varlpenis
+# Copyright 2019 Seth Price
+# This file is distributed under the same license as the varlpenis package.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: varlpenis\n"
+"Report-Msgid-Bugs-To: ssterling@firemail.cc\n"
+"POT-Creation-Date: 2019-12-20 22:29-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/main.c:198
+#, c-format
+msgid "    -c       output color\n"
+msgstr ""
+
+#: src/main.c:200
+#, c-format
+msgid "    -e num   set length of semen string\n"
+msgstr ""
+
+#: src/main.c:202
+#, c-format
+msgid "    -f       output fullwidth characters\n"
+msgstr ""
+
+#: src/main.c:204
+#, c-format
+msgid "    -h       show this message\n"
+msgstr ""
+
+#: src/main.c:205
+#, c-format
+msgid "    -l num   set length of shaft\n"
+msgstr ""
+
+#: src/main.c:206
+#, c-format
+msgid "    -v       show copyright and version info\n"
+msgstr ""
+
+#: src/main.c:164
+#, c-format
+msgid "Error: argument to option `-%c' is too large (above `UINT_MAX').\n"
+msgstr ""
+
+#: src/main.c:154
+#, c-format
+msgid "Error: argument to option `-%c' must be a positive integer\n"
+msgstr ""
+
+#: src/main.c:159
+#, c-format
+msgid "Error: argument to option `-%c' must be zero or a positive integer\n"
+msgstr ""
+
+#: src/main.c:178
+#, c-format
+msgid "Error: bogus error code received from options parser\n"
+msgstr ""
+
+#: src/main.c:149
+#, c-format
+msgid "Error: option `-%c' requires a positive integer as an argument\n"
+msgstr ""
+
+#: src/main.c:170
+#, c-format
+msgid "Error: unknown option `-%c'\n"
+msgstr ""
+
+#: src/main.c:173
+#, c-format
+msgid "Error: unknown option char `\\x%x'\n"
+msgstr ""
+
+#: src/strings.h:15
+msgid "Generate an ASCII-art penis of arbitrary length"
+msgstr ""
+
+#. XXX This is a very weird way to implement a dynamically compiled
+#. help message, but it's the only working one I could think of
+#: src/main.c:194
+#, c-format
+msgid ""
+"usage: %s [options]\n"
+"  options:\n"
+msgstr ""

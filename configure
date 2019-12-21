@@ -411,6 +411,16 @@ CC=$CC
 CTAGS=ctags
 SHELL=/bin/sh
 RM=rm -rf
+_EOF
+	if test "$use_gettext" = "yes"; then
+		cat >>Makefile <<_EOF
+XGETTEXT=xgettext
+MSGINIT=msginit
+MSGMERGE=msgmerge
+MSGFMT=msgfmt
+_EOF
+	fi
+	cat >>Makefile <<_EOF
 
 # Compiler flags
 CFLAGS=$CFLAGS
@@ -473,10 +483,35 @@ _EOF
 .ifndef MANDIR
 MANDIR=$mandir
 .endif
+
+_EOF
+fi
+
+if test "$use_gettext" = "yes"; then
+	cat >>Makefile <<_EOF
+# If these are set, clean/install/etc targets will
+# also trigger clean-mo/install-mo/etc
+BUILD_MO=build-mo-files
+INSTALL_MO=install-mo-files
+UNINSTALL_MO=uninstall-mo-files
+CLEAN_MO=clean-mo-files
+
+# gettext tools options
+XGETTEXT_OPTIONS = --add-comments --sort-output
+MSGID_BUGS_ADDRESS = ssterling@firemail.cc
+COPYRIGHT_HOLDER = Seth Price
+
 _EOF
 fi
 
 cat Makefile.in >> Makefile
+
+if test "$use_gettext" = "yes"; then
+	cat >>Makefile <<_EOF
+
+_EOF
+	cat $srcdir/po/Makefile.in >> Makefile
+fi
 
 test "$is_quiet" = "no" && echo "done."
 

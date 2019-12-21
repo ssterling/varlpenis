@@ -1,0 +1,74 @@
+###############################################
+# Begin Makefile.in (for `src/po/' directory) #
+###############################################
+
+# Much of this file's logic was adapted from Ulrich Drepper's template:
+#     <http://web.mit.edu/~jfc/prog/fetchmail-6.3.8/po/Makefile>
+
+# Files which contain translatable strings
+POT_INPUT_FILES = ${SRCDIR}/main.c ${SRCDIR}/strings.h
+
+# Essentially a list of languages supported
+PO_FILES = ${SRCDIR}/po/fr.po ${SRCDIR}/po/ja.po
+
+.PHONY: rebuild-po-files build-mo-files install-mo-files \
+	uninstall-mo-files clean-mo-files
+
+${SRCDIR}/po/varlpenis.pot:
+	${XGETTEXT} ${XGETTEXT_OPTIONS} \
+		--keyword=_ --language=C \
+		--package-name="varlpenis" \
+		--msgid-bugs-address="${MSGID_BUGS_ADDRESS}" \
+		--copyright-holder="${COPYRIGHT_HOLDER}" \
+		-o ${SRCDIR}/po/varlpenis.pot ${POT_INPUT_FILES}
+
+# Re-build PO files if POT file has changed
+${PO_FILES}: ${SRCDIR}/po/varlpenis.pot
+	@lang=`echo $@ | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
+	if test -f "${SRCDIR}/po/$${lang}.po"; then \
+		echo "${MSGMERGE} --update ${SRCDIR}/po/$${lang}.po ${SRCDIR}/po/varlpenis.pot"; \
+		${MSGMERGE} --update ${SRCDIR}/po/$${lang}.po ${SRCDIR}/po/varlpenis.pot; \
+	else \
+		${MSGINIT} --input=${SRCDIR}/po/varlpenis.pot \
+		--locale=$${lang} --no-translator \
+		--output ${SRCDIR}/po/$${lang}.po; \
+	fi
+
+# Alias
+build-pot-file: ${SRCDIR}/po/varlpenis.pot
+
+# Also alias
+rebuild-po-files: ${PO_FILES}
+
+build-mo-files: ${PO_FILES}
+	@for f in ${PO_FILES}; do \
+		lang=`echo $$f | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
+		test ! -d "${SRCDIR}/po/$${lang}" && mkdir ${SRCDIR}/po/$${lang}; \
+		test ! -d "${SRCDIR}/po/$${lang}/LC_MESSAGES" && mkdir ${SRCDIR}/po/$${lang}/LC_MESSAGES; \
+		echo "${MSGFMT} --output-file=${SRCDIR}/po/$${lang}/LC_MESSAGES/varlpenis.mo ${SRCDIR}/po/$${lang}.po"; \
+		${MSGFMT} --output-file=${SRCDIR}/po/$${lang}/LC_MESSAGES/varlpenis.mo ${SRCDIR}/po/$${lang}.po; \
+	done
+
+# Relies on variables set in the main Makefile
+install-mo-files: build-mo-files
+	@for f in ${PO_FILES}; do \
+		lang=`echo $$f | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
+		echo "${INSTALL_DIR} ${LOCALEDIR}/$${lang}/LC_MESSAGES"; \
+		${INSTALL_DIR} ${LOCALEDIR}/$${lang}/LC_MESSAGES; \
+		echo "${INSTALL_DATA} ${SRCDIR}/po/$${lang}/LC_MESSAGES/varlpenis.mo ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo"; \
+		${INSTALL_DATA} ${SRCDIR}/po/$${lang}/LC_MESSAGES/varlpenis.mo ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo; \
+	done
+
+uninstall-mo-files:
+	@for f in ${PO_FILES}; do \
+		lang=`echo $$f | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
+		echo "${RM} ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo"; \
+		${RM} ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo; \
+	done
+
+clean-mo-files:
+	@for f in ${PO_FILES}; do \
+		lang=`echo $$f | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
+		echo "${RM} ${SRCDIR}/po/$${lang}"; \
+		${RM} ${SRCDIR}/po/$${lang}; \
+	done

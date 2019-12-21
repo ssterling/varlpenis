@@ -17,14 +17,14 @@ C_FILES = ${SRCDIR}/main.c ${SRCDIR}/draw.c
 .PHONY: all install install-strip install-bin install-bin-strip \
 	install-docs uninstall uninstall-bin uninstall-docs check clean
 
-all: varlpenis tags
+all: varlpenis tags ${BUILD_MO}
 
 varlpenis:
 	${CC} ${CFLAGS} ${C_FILES} ${FEATURE_CFLAGS} -o varlpenis
 
-install: install-bin install-docs
+install: install-bin install-docs ${INSTALL_MO}
 
-install-strip: install-bin-strip install-docs
+install-strip: install-bin-strip install-docs ${INSTALL_MO}
 
 install-bin: varlpenis
 	${INSTALL_DIR} ${BINDIR}
@@ -40,7 +40,7 @@ install-docs:
 	${INSTALL_DIR} ${DATADIR}/varlpenis
 	${INSTALL_DATA} 8=D.jpg ${DATADIR}/varlpenis/8=D.jpg
 
-uninstall: uninstall-bin uninstall-docs
+uninstall: uninstall-bin uninstall-docs ${UNINSTALL_MO}
 
 uninstall-bin:
 	${RM} ${BINDIR}/varlpenis
@@ -55,5 +55,5 @@ check: varlpenis
 tags:
 	${CTAGS} ${SRCDIR}/*
 
-clean:
+clean: ${CLEAN_MO}
 	${RM} *.o varlpenis check.sh tags
