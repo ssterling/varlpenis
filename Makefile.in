@@ -19,41 +19,46 @@ C_FILES = ${SRCDIR}/main.c ${SRCDIR}/draw.c
 
 all: varlpenis tags ${BUILD_MO}
 
-varlpenis:
+varlpenis: ## Build binary executable
 	${CC} ${CFLAGS} ${C_FILES} ${FEATURE_CFLAGS} -o varlpenis
 
-install: install-bin install-docs ${INSTALL_MO}
+install: install-bin install-docs ${INSTALL_MO} ## Install all files
 
-install-strip: install-bin-strip install-docs ${INSTALL_MO}
+install-strip: install-bin-strip install-docs ${INSTALL_MO} ## Install all files and strip binary executable
 
-install-bin: varlpenis
+install-bin: varlpenis ## Install binary executable
 	${INSTALL_DIR} ${BINDIR}
 	${INSTALL_PROGRAM} varlpenis ${BINDIR}
 
-install-bin-strip: varlpenis
+install-bin-strip: varlpenis ## Install stripped binary executable
 	${INSTALL_DIR} ${BINDIR}
 	${INSTALL_PROGRAM_STRIP} varlpenis ${BINDIR}
 
-install-docs:
+install-docs: ## Install manpage
 	${INSTALL_DIR} ${MANDIR}/man6
 	${INSTALL_MAN} ${DOCDIR}/varlpenis.6 ${MANDIR}/man6/varlpenis.6
 	${INSTALL_DIR} ${DATADIR}/varlpenis
 	${INSTALL_DATA} 8=D.jpg ${DATADIR}/varlpenis/8=D.jpg
 
-uninstall: uninstall-bin uninstall-docs ${UNINSTALL_MO}
+uninstall: uninstall-bin uninstall-docs ${UNINSTALL_MO} ## Uninstall all items
 
-uninstall-bin:
+uninstall-bin: ## Uninstall varlpenis executable
 	${RM} ${BINDIR}/varlpenis
 
-uninstall-docs:
+uninstall-docs: ## Uninstall manpage
 	${RM} ${MANDIR}/man6/varlpenis.6
 	${RM} ${DATADIR}/varlpenis
 
-check: varlpenis
+check: varlpenis ## Check basic functionality of output executable
 	${SHELL} ./check.sh
 
-tags:
+tags: ## Generate tag file
 	${CTAGS} ${SRCDIR}/*
 
-clean: ${CLEAN_MO}
+clean: ${CLEAN_MO} ## Clean all generated files (except Makefile)
 	${RM} *.o varlpenis check.sh tags
+
+# `Shell script voodoo' borrowed from François Zaninotto:
+# <https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html>
+help: ## View this message
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "%-20s %s\n", $$1, $$2}'

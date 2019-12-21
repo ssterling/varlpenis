@@ -35,12 +35,12 @@ ${PO_FILES}: ${SRCDIR}/po/varlpenis.pot
 	fi
 
 # Alias
-build-pot-file: ${SRCDIR}/po/varlpenis.pot
+build-pot-file: ${SRCDIR}/po/varlpenis.pot ## Re-build translation template file
 
 # Also alias
-rebuild-po-files: ${PO_FILES}
+rebuild-po-files: ${PO_FILES} ## Re-build translation files
 
-build-mo-files: ${PO_FILES}
+build-mo-files: ${PO_FILES} ## Build translated message files for installation
 	@for f in ${PO_FILES}; do \
 		lang=`echo $$f | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
 		test ! -d "${SRCDIR}/po/$${lang}" && mkdir ${SRCDIR}/po/$${lang}; \
@@ -50,7 +50,7 @@ build-mo-files: ${PO_FILES}
 	done
 
 # Relies on variables set in the main Makefile
-install-mo-files: build-mo-files
+install-mo-files: build-mo-files ## Install translated message files
 	@for f in ${PO_FILES}; do \
 		lang=`echo $$f | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
 		echo "${INSTALL_DIR} ${LOCALEDIR}/$${lang}/LC_MESSAGES"; \
@@ -59,14 +59,14 @@ install-mo-files: build-mo-files
 		${INSTALL_DATA} ${SRCDIR}/po/$${lang}/LC_MESSAGES/varlpenis.mo ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo; \
 	done
 
-uninstall-mo-files:
+uninstall-mo-files: ## Uninstall translated message files
 	@for f in ${PO_FILES}; do \
 		lang=`echo $$f | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
 		echo "${RM} ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo"; \
 		${RM} ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo; \
 	done
 
-clean-mo-files:
+clean-mo-files: ## Remove generated message files
 	@for f in ${PO_FILES}; do \
 		lang=`echo $$f | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
 		echo "${RM} ${SRCDIR}/po/$${lang}"; \
