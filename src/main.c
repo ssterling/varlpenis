@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 						options.error_char);
 			else
 				fprintf(stderr, _("Error: unknown option char "
-						  "`\\x%x'\n"),
+						  "`\\x%X'\n"),
 						(int)options.error_char);
 			return EX_USAGE;
 		default:
