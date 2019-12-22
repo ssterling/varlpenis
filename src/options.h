@@ -11,15 +11,15 @@
 /* TODO: find a way to clean this part up */
 #ifdef VP_USE_COLOR
 #ifdef VP_USE_FULLWIDTH
-#define GETOPT_OPTIONS_STRING "ce:fhl:v" /* fullwidth, color */
+#define GETOPT_OPTIONS_STRING "cd:e:fhl:v" /* fullwidth, color */
 #else /* VP_USE_FULLWIDTH */
-#define GETOPT_OPTIONS_STRING "ce:hl:v" /* color */
+#define GETOPT_OPTIONS_STRING "cd:e:hl:v" /* color */
 #endif /* VP_USE_FULLWIDTH */
 #else /* VP_USE_COLOR */
 #ifdef VP_USE_FULLWIDTH
-#define GETOPT_OPTIONS_STRING "e:fhl:v" /* fullwidth */
+#define GETOPT_OPTIONS_STRING "d:e:fhl:v" /* fullwidth */
 #else /* VP_USE_FULLWIDTH */
-#define GETOPT_OPTIONS_STRING "e:hl:v" /* none */
+#define GETOPT_OPTIONS_STRING "d:e:hl:v" /* none */
 #endif /* VP_USE_FULLWIDTH */
 #endif /* VP_USE_COLOR */
 
