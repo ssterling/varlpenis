@@ -25,7 +25,7 @@ static char *repeat_string(const char *str, unsigned int count)
 		return ret;
 	}
 
-	str_length = strlen(str);
+	str_length = strlen(str) + 1;
 
 	ret = malloc(str_length * count + 1);
 	strncpy(ret, str, str_length);

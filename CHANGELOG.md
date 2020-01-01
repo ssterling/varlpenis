@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0.1 (2020/01/01)
+------------------
+
+* Change `str_length` in `repeat_string()` to be `strlen(str) + 1`,
+  not just `strlen(str)`
+
 2.0 (2020/01/01)
 ----------------
 
