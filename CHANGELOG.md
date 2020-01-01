@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0 (2020/01/01)
+----------------
+
+* Added NLS with gettext
+* Added fullwidth (UTF-8) output option
+
 1.2 (2019/04/13)
 ----------------
 
