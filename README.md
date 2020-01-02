@@ -41,8 +41,9 @@ $ make
 # make install
 ```
 
-Should work on UNIX-like systems; untested on Winblows, MS-DOS or anything
-else.  Written in ANSI C using only the standard library.
+Should work on UNIX-like systems with no modification.
+Instructions for MS-DOS can be found in [doc/](doc); support for
+other systems may be coming in the future.
 
 ### Configuration
 
