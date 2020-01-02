@@ -11,7 +11,7 @@
 #define VP_STRINGS_H
 
 #define VP_PROGRAM_DESC _("Generate an ASCII-art penis of arbitrary length")
-#define VP_COPYRIGHT    "Copyright 2019 Seth Price.  See LICENSE file for details"
+#define VP_COPYRIGHT    "Copyright 2019, 2020 Seth Price.  See LICENSE file for details"
 
 /* Name/version should be defined in Makefile;
  * if not, here are some safe defaults */

@@ -12,7 +12,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+/* For use on non-POSIX systems with some
+ * sort of separate getopt implementation */
+#ifdef VP_USE_GETOPT_H
+#include <getopt.h>
+#else /* VP_USE_GETOPT_H */
 #include <unistd.h>
+#endif /* VP_USE_GETOPT_H */
 
 #ifdef VP_USE_POSIXTIME
 #include <sys/time.h>
@@ -146,29 +153,29 @@ int main(int argc, char *argv[])
 		case ERR_OK:
 			break;
 		case ERR_NOARG:
-			fprintf(stderr, _("Error: option `-%c' requires a "
+			fprintf(stderr, _("Error: option `%c%c' requires a "
 			                  "positive integer as an argument\n"),
-					options.error_char);
+					OPTION_CHAR, options.error_char);
 			return EX_USAGE;
 		case ERR_NOTINT:
-			fprintf(stderr, _("Error: argument to option `-%c' "
+			fprintf(stderr, _("Error: argument to option `%c%c' "
 			                  "must be a positive integer\n"),
-			                options.error_char);
+			                OPTION_CHAR, options.error_char);
 			return EX_USAGE;
 		case ERR_NOTINTORZERO:
-			fprintf(stderr, _("Error: argument to option `-%c' "
+			fprintf(stderr, _("Error: argument to option `%c%c' "
 			                  "must be zero or a positive integer\n"),
-			                options.error_char);
+			                OPTION_CHAR, options.error_char);
 			return EX_USAGE;
 		case ERR_BIGUINT:
-			fprintf(stderr, _("Error: argument to option `-%c' "
+			fprintf(stderr, _("Error: argument to option `%c%c' "
 			                  "is too large (above `UINT_MAX').\n"),
-			                options.error_char);
+			                OPTION_CHAR, options.error_char);
 			return EX_USAGE;
 		case ERR_UNKNOWNCHAR:
 			if (isprint(options.error_char))
-				fprintf(stderr, _("Error: unknown option `-%c'\n"),
-						options.error_char);
+				fprintf(stderr, _("Error: unknown option `%c%c'\n"),
+						OPTION_CHAR, options.error_char);
 			else
 				fprintf(stderr, _("Error: unknown option char "
 						  "`\\x%X'\n"),
@@ -195,15 +202,18 @@ int main(int argc, char *argv[])
 		         "  options:\n"),
 		       VP_PROGRAM_NAME);
 #ifdef VP_USE_COLOR
-		printf(_("    -c       output color\n"));
+		printf(_("    %cc       output color\n"), OPTION_CHAR);
 #endif /* VP_USE_COLOR */
-		printf(_("    -e num   set length of semen string\n"));
+		printf(_("    %ce num   set length of semen string\n"),
+		       OPTION_CHAR);
 #ifdef VP_USE_FULLWIDTH
-		printf(_("    -f       output fullwidth characters\n"));
+		printf(_("    %cf       output fullwidth characters\n"),
+		       OPTION_CHAR);
 #endif /* VP_USE_FULLWIDTH */
-		printf(_("    -h       show this message\n"));
-		printf(_("    -l num   set length of shaft\n"));
-		printf(_("    -v       show copyright and version info\n"));
+		printf(_("    %ch       show this message\n"), OPTION_CHAR);
+		printf(_("    %cl num   set length of shaft\n"), OPTION_CHAR);
+		printf(_("    %cv       show copyright and version info\n"),
+		       OPTION_CHAR);
 	}
 	if (options.flags & OPT_HELP || options.flags & OPT_VERSION)
 		return EX_OK;

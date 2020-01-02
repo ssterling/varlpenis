@@ -23,6 +23,11 @@
 #endif /* VP_USE_FULLWIDTH */
 #endif /* VP_USE_COLOR */
 
+/* Can be defined to display `/' for DOS and the like */
+#ifndef OPTION_CHAR
+#define OPTION_CHAR '-'
+#endif /* ! OPTION_CHAR */
+
 enum OPTIONS_E {
 	NO_OPTS      = 0,
 	OPT_HELP     = 1,  /* Print help message to stdout */
