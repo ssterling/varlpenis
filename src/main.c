@@ -12,7 +12,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+/* For use on non-POSIX systems with some
+ * sort of separate getopt implementation */
+#ifdef VP_USE_GETOPT_H
+#include <getopt.h>
+#else /* VP_USE_GETOPT_H */
 #include <unistd.h>
+#endif /* VP_USE_GETOPT_H */
 
 #ifdef VP_USE_POSIXTIME
 #include <sys/time.h>
