@@ -11,6 +11,19 @@
 #ifndef VP_DRAW_H
 #define VP_DRAW_H
 
+/* Fallback in case the user is using old Makefiles/docs/etc. */
+#if defined(VP_USE_COLOR) && !defined(VP_USE_COLOR_ANSI)
+#warning "Using `VP_USE_COLOR' as a feature flag is deprecated.  " \
+         "Assuming you meant `VP_USE_COLOR_ANSI'."
+#define VP_USE_COLOR_ANSI
+#endif /* VP_USE_COLOR && ! VP_USE_COLOR_ANSI */
+
+/* For `#if' directives which do not depend on the type of
+ * colour output enabled (i.e. the usage message) */
+#if defined(VP_USE_COLOR_ANSI) && !defined(VP_USE_COLOR)
+#define VP_USE_COLOR
+#endif /* VP_USE_COLOR_ANSI && ! VP_USE_COLOR */
+
 #define LENGTH_MIN          1
 #define LENGTH_MAX          RAND_MAX
 #define DISTANCE_MIN        0
@@ -27,13 +40,13 @@
 #define HEAD_CHAR           "D"
 #define EJAC_CHAR           "~"
 
-#ifdef VP_USE_COLOR
+#ifdef VP_USE_COLOR_ANSI
 #define SCROTUM_COLOR_ANSI  "\33[33m"       /* yellow */
 #define SHAFT_COLOR_ANSI    "\33[1m\33[33m" /* bright yellow */
 #define HEAD_COLOR_ANSI     "\33[1m\33[31m" /* bright red */
 #define EJAC_COLOR_ANSI     "\33[1m\33[37m" /* bright white */
 #define RESET_CODE_ANSI     "\33[0m"
-#endif /* VP_USE_COLOR */
+#endif /* VP_USE_COLOR_ANSI */
 
 #ifdef VP_USE_FULLWIDTH
 #define SCROTUM_CHAR_UTF8   "８"

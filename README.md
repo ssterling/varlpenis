@@ -50,7 +50,7 @@ other systems may be coming in the future.
 Use any of the following when running `./configure` to control optional
 features:
 
-* `--use-color`: Enable colour support using ANSI escape codes
+* `--use-color-ansi`: Enable colour support using ANSI escape codes
 * `--use-fullwidth`: Enable fullwidth (CJK) character output using UTF-8
 * `--use-gettext`: Enable message translations using gettext
 * `--use-posixtime`: Use higher-resolution time for better random numbers

@@ -41,7 +41,8 @@ is_quiet="no"
 ifndef_guards="yes"
 
 # Default feature values
-use_color="no"
+use_color="unset" #deprecated
+use_color_ansi="no"
 use_fullwidth="no"
 use_gettext="no"
 use_sysexits="no"
@@ -136,7 +137,7 @@ Installation directories:
   --no-ifndef-guards  Ignore environment variables for installation dirs
 
 Optional features (using --use-FEATURE [all are off by default]):
-  color               Enable colour support using ANSI escape codes
+  color-ansi          Enable colour support using ANSI escape codes
   fullwidth           Enable fullwidth (CJK) character output using UTF-8
   gettext             Enable message translations using gettext
   posixtime           Use higher-resolution time for better random numbers
@@ -163,6 +164,16 @@ if test "$is_verbose" = "yes" && test "$is_quiet" = "yes"; then
 fi
 
 test "$is_verbose" = "yes" && echo "Entering verbose mode."
+
+# TODO: in future versions where more colour output formats exist,
+#       check to make sure only one is enabled at once
+
+# Check for deprecated `--use-color' flag
+if test "$use_color" != "unset"; then
+	echo "$log_w: The \`--use-color' flag is deprecated. " \
+	     "Assuming you meant \`--use-color-ansi'." >&2
+	use_color_ansi="yes"
+fi
 
 # Check whether PWD is usable
 test "$is_verbose" = "yes" &&
@@ -381,8 +392,8 @@ test "$is_verbose" = "yes" && test -n "$CFLAGS" &&
 test "$is_verbose" = "yes" &&
   echo $n "Computing feature CFLAGS... "
 feature_CFLAGS=""
-test "$use_color" = "yes" &&
-  feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR"
+test "$use_color_ansi" = "yes" &&
+  feature_CFLAGS="$feature_CFLAGS -DVP_USE_COLOR_ANSI"
 test "$use_fullwidth" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_FULLWIDTH"
 test "$use_gettext" = "yes" &&

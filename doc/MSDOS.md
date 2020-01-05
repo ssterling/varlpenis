@@ -31,16 +31,16 @@ Actually compiling
 
 The following macros should be set as needed:
 
-| Macro             | Definition                                          |
-|------------------:|-----------------------------------------------------|
-| `VP_USE_GETOPT_H` | Include `getopt.h` instead of `unistd.h` (required) |
-| `VP_USE_COLOR`    | Set to enable ANSI color output via `ANSI.SYS`      |
-| `VP_VERSION_STR`  | Define with program version as seen in `configure`  |
-| `OPTION_CHAR`     | Option prefix; likely `/` on DOS (`-` on UNIX)      |
+| Macro                 | Definition                                          |
+|----------------------:|-----------------------------------------------------|
+| `VP_USE_GETOPT_H`     | Include `getopt.h` instead of `unistd.h` (required) |
+| `VP_USE_COLOR_ANSI`   | Set to enable ANSI color output via `ANSI.SYS`      |
+| `VP_VERSION_STR`      | Define with program version as seen in `configure`  |
+| `OPTION_CHAR`         | Option prefix; likely `/` on DOS (`-` on UNIX)      |
 
 Finally, you should be able compile the program.
 Below is the command I used; your setup may vary:
 
 ```console
-A:\VP\SRC>TCC -A -mt -DVP_USE_GETOPT_H -DVP_USE_COLOR -DVP_VERSION_STR="2.0-DOS" -DOPTION_CHAR='/' MAIN.C DRAW.C
+A:\VP\SRC>TCC -A -mt -DVP_USE_GETOPT_H -DVP_USE_COLOR_ANSI -DVP_VERSION_STR="2.0-DOS" -DOPTION_CHAR='/' MAIN.C DRAW.C
 ```
