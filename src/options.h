@@ -8,20 +8,15 @@
 #ifndef VP_OPTIONS_H
 #define VP_OPTIONS_H
 
-/* TODO: find a way to clean this part up */
-#ifdef VP_USE_COLOR
-#ifdef VP_USE_FULLWIDTH
+#if defined(VP_USE_COLOR) && defined(VP_USE_FULLWIDTH)
 #define GETOPT_OPTIONS_STRING "cd:e:fhl:v" /* fullwidth, color */
-#else /* VP_USE_FULLWIDTH */
+#elif defined (VP_USE_COLOR) && !defined(VP_USE_FULLWIDTH)
 #define GETOPT_OPTIONS_STRING "cd:e:hl:v" /* color */
-#endif /* VP_USE_FULLWIDTH */
-#else /* VP_USE_COLOR */
-#ifdef VP_USE_FULLWIDTH
+#elif !defined (VP_USE_COLOR) && defined(VP_USE_FULLWIDTH)
 #define GETOPT_OPTIONS_STRING "d:e:fhl:v" /* fullwidth */
-#else /* VP_USE_FULLWIDTH */
+#else
 #define GETOPT_OPTIONS_STRING "d:e:hl:v" /* none */
-#endif /* VP_USE_FULLWIDTH */
-#endif /* VP_USE_COLOR */
+#endif
 
 /* Can be defined to display `/' for DOS and the like */
 #ifndef OPTION_CHAR

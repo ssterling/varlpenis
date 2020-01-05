@@ -39,8 +39,7 @@ static char *repeat_string(const char *str, unsigned int count)
 void draw_penis(const unsigned int length, const unsigned int distance,
                 const enum DRAW_FLAGS_E flags)
 {
-#ifdef VP_USE_FULLWIDTH
-#ifdef VP_USE_COLOR
+#if defined(VP_USE_FULLWIDTH) && defined(VP_USE_COLOR)
 	if ((flags & FULLWIDTH) && (flags & COLOR)) {
 		printf("%s%s%s%s%s%s%s%s%s\n",
 		       SCROTUM_COLOR_ANSI, SCROTUM_CHAR_UTF8,
@@ -52,7 +51,9 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 		       RESET_CODE_ANSI);
 		return;
 	}
-#endif /* VP_USE_COLOR */
+#endif /* VP_USE_FULLWIDTH && VP_USE_COLOR */
+
+#ifdef VP_USE_FULLWIDTH
 	if (flags & FULLWIDTH) {
 		printf("%s%s%s%s\n",
 		       SCROTUM_CHAR_UTF8,
