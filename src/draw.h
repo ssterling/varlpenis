@@ -9,6 +9,11 @@
 #include <stdlib.h>
 
 /* For colour definitions */
+#ifdef VP_USE_COLOR_CONIO
+#include <conio.h>
+#endif /* VP_USE_COLOR_CONIO */
+
+/* Also for colour definitions */
 #ifdef VP_USE_COLOR_WOE32
 #include <windows.h>
 #endif /* VP_USE_COLOR_WOE32 */
@@ -18,7 +23,8 @@
 
 /* Fallback in case the user is using old Makefiles/docs/etc. */
 #if defined(VP_USE_COLOR) && \
-    (!defined(VP_USE_COLOR_ANSI) && !defined(VP_USE_COLOR_WOE32))
+    (!defined(VP_USE_COLOR_ANSI) && !defined(VP_USE_COLOR_WOE32) && \
+     !defined(VP_USE_COLOR_CONIO))
 #warning "Using `VP_USE_COLOR' as a feature flag is deprecated.  " \
          "Assuming you meant `VP_USE_COLOR_ANSI'."
 #define VP_USE_COLOR_ANSI
@@ -27,7 +33,8 @@
 /* For `#if' directives which do not depend on the type of
  * colour output enabled (i.e. the usage message) */
 #if !defined(VP_USE_COLOR) && \
-    (defined(VP_USE_COLOR_ANSI) || defined(VP_USE_COLOR_WOE32))
+    (defined(VP_USE_COLOR_ANSI) || defined(VP_USE_COLOR_WOE32) || \
+     defined(VP_USE_COLOR_CONIO))
 #define VP_USE_COLOR
 #endif /* ! VP_USE_COLOR && VP_USE_COLOR_[...] */
 
@@ -55,6 +62,11 @@
 #define HEAD_COLOR_ANSI     "\33[1m\33[31m" /* bright red */
 #define EJAC_COLOR_ANSI     "\33[1m\33[37m" /* bright white */
 #define RESET_CODE_ANSI     "\33[0m"
+#elif defined(VP_USE_COLOR_CONIO)
+#define SCROTUM_COLOR_CONIO BROWN
+#define SHAFT_COLOR_CONIO   YELLOW
+#define HEAD_COLOR_CONIO    LIGHTRED
+#define EJAC_COLOR_CONIO    WHITE
 #elif defined(VP_USE_COLOR_WOE32)
 #define SCROTUM_COLOR_WOE32 FOREGROUND_RED | FOREGROUND_GREEN
 #define SHAFT_COLOR_WOE32   FOREGROUND_RED | FOREGROUND_GREEN | \

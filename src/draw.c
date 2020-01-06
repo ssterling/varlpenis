@@ -9,6 +9,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef VP_USE_COLOR_CONIO
+#include <conio.h>
+#endif /* VP_USE_COLOR_CONIO */
+
 #ifdef VP_USE_COLOR_WOE32
 #include <windows.h>
 #endif /* VP_USE_COLOR_WOE32 */
@@ -43,6 +47,10 @@ static char *repeat_string(const char *str, unsigned int count)
 void draw_penis(const unsigned int length, const unsigned int distance,
                 const enum DRAW_FLAGS_E flags)
 {
+#ifdef VP_USE_COLOR_CONIO
+	struct text_info old_text_info;
+#endif /* VP_USE_COLOR_CONIO */
+
 #ifdef VP_USE_COLOR_WOE32
 	HANDLE console;
 	WORD old_console_attrs;
@@ -62,6 +70,21 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 		       EJAC_COLOR_ANSI,
 		       repeat_string(EJAC_CHAR_UTF8, distance),
 		       RESET_CODE_ANSI);
+		return;
+	}
+#elif defined(VP_USE_COLOR_CONIO)
+	if ((flags & FULLWIDTH) && (flags & COLOR)) {
+		gettextinfo(&old_text_info);
+
+		textcolor(SCROTUM_COLOR_CONIO);
+		cprintf("%s", SCROTUM_CHAR_UTF8);
+		textcolor(SHAFT_COLOR_CONIO);
+		cprintf("%s", repeat_string(SHAFT_CHAR_UTF8, length));
+		textcolor(HEAD_COLOR_CONIO);
+		cprintf("%s", HEAD_CHAR_UTF8);
+		textcolor(EJAC_COLOR_CONIO);
+		cprintf("%s", repeat_string(EJAC_CHAR_UTF8, length));
+		textcolor(old_text_info.attribute);
 		return;
 	}
 #elif defined(VP_USE_COLOR_WOE32)
@@ -102,6 +125,21 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 		       EJAC_COLOR_ANSI,
 		       repeat_string(EJAC_CHAR, distance),
 		       RESET_CODE_ANSI);
+		return;
+	}
+#elif defined(VP_USE_COLOR_CONIO)
+	if (flags & COLOR) {
+		gettextinfo(&old_text_info);
+
+		textcolor(SCROTUM_COLOR_CONIO);
+		cprintf("%s", SCROTUM_CHAR);
+		textcolor(SHAFT_COLOR_CONIO);
+		cprintf("%s", repeat_string(SHAFT_CHAR, length));
+		textcolor(HEAD_COLOR_CONIO);
+		cprintf("%s", HEAD_CHAR);
+		textcolor(EJAC_COLOR_CONIO);
+		cprintf("%s", repeat_string(EJAC_CHAR, length));
+		textcolor(old_text_info.attribute);
 		return;
 	}
 #elif defined(VP_USE_COLOR_WOE32)

@@ -26,6 +26,12 @@ cryptic message `Undefined module _main in C0S`.
 Using a program such as `unix2dos`, convert the line endings of all
 source files appropriately.
 
+### Removing incompatible preprocessor directives
+
+As of writing this tutorial, the only problematic directives are all
+`#warning` in `draw.h`.
+Just remove those; they're not completely necessary.
+
 Actually compiling
 ------------------
 

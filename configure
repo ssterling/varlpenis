@@ -43,6 +43,7 @@ ifndef_guards="yes"
 # Default feature values
 use_color="unset" #deprecated
 use_color_ansi="no"
+use_color_conio="no"
 use_color_woe32="no"
 use_fullwidth="no"
 use_gettext="no"
@@ -139,6 +140,7 @@ Installation directories:
 
 Optional features (using --use-FEATURE [all are off by default]):
   color-ansi          Enable colour support using ANSI escape codes
+  color-conio            "      "      "      "   DOS \`textcolor()'
   color-woe32            "      "      "      "   the Windows Console API
   fullwidth           Enable fullwidth (CJK) character output using UTF-8
   gettext             Enable message translations using gettext
@@ -168,7 +170,10 @@ fi
 test "$is_verbose" = "yes" && echo "Entering verbose mode."
 
 # Make sure only one `--use-color-TYPE' flag is set
-if test "$use_color_ansi" = "yes" && test "$use_color_woe32" = "yes"; then
+# TODO: clean this up somehow
+if (test "$use_color_ansi" = "yes" && test "$use_color_woe32" = "yes") || \
+   (test "$use_color_ansi" = "yes" && test "$use_color_conio" = "yes") || \
+   (test "$use_color_woe32" = "yes" && test "$use_color_conio" = "yes"); then
 	echo "$log_e: Cannot use more than one \`--use-color-TYPE'"\
 	     "flag at once." >&2
 	exit 1
@@ -313,6 +318,29 @@ else
 	echo "$log_e: Specify a valid include dir in your CFLAGS with "\
 	     "\`CFLAGS=-I/path/to/dir' when running this script." >&2
 	exit 1
+fi
+
+# Check for DOS `conio.h'
+if test "$use_color_conio" = "yes"; then
+	test "$is_quiet" = "no" &&
+	  echo $n "Checking for conio \`conio.h'... "
+	cat >conftest.c <<_EOF
+#include <conio.h>
+
+int main() { return 0; }
+_EOF
+	(eval $CC $CFLAGS conftest.c -o conftest) 2>conftest.err
+	rm -f conftest.o conftest.c conftest
+	if test ! -s conftest.err; then
+		test "$is_quiet" = "no" && echo "found."
+		rm -f conftest.err
+	else
+		test "$is_quiet" = "no" && echo "not found."
+		echo "$log_e: Cannot find \`conio.h'." >&2
+		echo "$log_e: Specify a valid include dir in your CFLAGS with"\
+		     "\`CFLAGS=-I/path/to/dir' when running this script." >&2
+		exit 1
+	fi
 fi
 
 # Check for Windows API
