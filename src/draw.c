@@ -9,6 +9,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef VP_USE_COLOR_WOE32
+#include <windows.h>
+#endif /* VP_USE_COLOR_WOE32 */
+
 #include "draw.h"
 
 /* The `main()' function is 99% options-parsing and error-handling;
@@ -39,7 +43,16 @@ static char *repeat_string(const char *str, unsigned int count)
 void draw_penis(const unsigned int length, const unsigned int distance,
                 const enum DRAW_FLAGS_E flags)
 {
-#if defined(VP_USE_FULLWIDTH) && defined(VP_USE_COLOR_ANSI)
+#ifdef VP_USE_COLOR_WOE32
+	HANDLE console;
+	WORD old_console_attrs;
+	CONSOLE_SCREEN_BUFFER_INFO csbi_info;
+
+	console = GetStdHandle(STD_OUTPUT_HANDLE);
+#endif /* VP_USE_COLOR_WOE32 */
+
+#ifdef VP_USE_FULLWIDTH
+#if defined(VP_USE_COLOR_ANSI)
 	if ((flags & FULLWIDTH) && (flags & COLOR)) {
 		printf("%s%s%s%s%s%s%s%s%s\n",
 		       SCROTUM_COLOR_ANSI, SCROTUM_CHAR_UTF8,
@@ -51,9 +64,24 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 		       RESET_CODE_ANSI);
 		return;
 	}
-#endif /* VP_USE_FULLWIDTH && VP_USE_COLOR_ANSI */
+#elif defined(VP_USE_COLOR_WOE32)
+	if ((flags & FULLWIDTH) && (flags & COLOR)) {
+		GetConsoleScreenBufferInfo(console, &csbi_info);
+		old_console_attrs = csbi_info.wAttributes;
 
-#ifdef VP_USE_FULLWIDTH
+		SetConsoleTextAttribute(console, SCROTUM_COLOR_WOE32);
+		printf("%s", SCROTUM_CHAR_UTF8);
+		SetConsoleTextAttribute(console, SHAFT_COLOR_WOE32);
+		printf("%s", repeat_string(SHAFT_CHAR_UTF8, length));
+		SetConsoleTextAttribute(console, HEAD_COLOR_WOE32);
+		printf("%s", HEAD_CHAR_UTF8);
+		SetConsoleTextAttribute(console, EJAC_COLOR_WOE32);
+		printf("%s", repeat_string(EJAC_CHAR_UTF8, length));
+		SetConsoleTextAttribute(console, old_console_attrs);
+		return;
+	}
+#endif /* VP_USE_COLOR_[...] */
+
 	if (flags & FULLWIDTH) {
 		printf("%s%s%s%s\n",
 		       SCROTUM_CHAR_UTF8,
@@ -64,7 +92,7 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 	}
 #endif /* VP_USE_FULLWIDTH */
 
-#ifdef VP_USE_COLOR_ANSI
+#if defined(VP_USE_COLOR_ANSI)
 	if (flags & COLOR) {
 		printf("%s%s%s%s%s%s%s%s%s\n",
 		       SCROTUM_COLOR_ANSI, SCROTUM_CHAR,
@@ -76,7 +104,23 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 		       RESET_CODE_ANSI);
 		return;
 	}
-#endif /* VP_USE_COLOR_ANSI */
+#elif defined(VP_USE_COLOR_WOE32)
+	if (flags & COLOR) {
+		GetConsoleScreenBufferInfo(console, &csbi_info);
+		old_console_attrs = csbi_info.wAttributes;
+
+		SetConsoleTextAttribute(console, SCROTUM_COLOR_WOE32);
+		printf("%s", SCROTUM_CHAR);
+		SetConsoleTextAttribute(console, SHAFT_COLOR_WOE32);
+		printf("%s", repeat_string(SHAFT_CHAR, length));
+		SetConsoleTextAttribute(console, HEAD_COLOR_WOE32);
+		printf("%s", HEAD_CHAR);
+		SetConsoleTextAttribute(console, EJAC_COLOR_WOE32);
+		printf("%s", repeat_string(EJAC_CHAR, length));
+		SetConsoleTextAttribute(console, old_console_attrs);
+		return;
+	}
+#endif /* VP_USE_COLOR_[...] */
 
 	/* No flags */
 	printf("%s%s%s%s\n",

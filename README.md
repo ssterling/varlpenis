@@ -42,8 +42,8 @@ $ make
 ```
 
 Should work on UNIX-like systems with no modification.
-Instructions for MS-DOS can be found in [doc/](doc); support for
-other systems may be coming in the future.
+Instructions for MS-DOS and Windows can be found in [doc/](doc);
+support for other, more unique systems may be coming in the future.
 
 ### Configuration
 
@@ -51,6 +51,7 @@ Use any of the following when running `./configure` to control optional
 features:
 
 * `--use-color-ansi`: Enable colour support using ANSI escape codes
+* `--use-color-woe32`: Enable colour support using the Windows API
 * `--use-fullwidth`: Enable fullwidth (CJK) character output using UTF-8
 * `--use-gettext`: Enable message translations using gettext
 * `--use-posixtime`: Use higher-resolution time for better random numbers

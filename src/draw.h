@@ -8,21 +8,30 @@
 /* Needed to get RAND_MIN and RAND_MAX */
 #include <stdlib.h>
 
+/* For colour definitions */
+#ifdef VP_USE_COLOR_WOE32
+#include <windows.h>
+#endif /* VP_USE_COLOR_WOE32 */
+
 #ifndef VP_DRAW_H
 #define VP_DRAW_H
 
 /* Fallback in case the user is using old Makefiles/docs/etc. */
-#if defined(VP_USE_COLOR) && !defined(VP_USE_COLOR_ANSI)
+#if defined(VP_USE_COLOR) && \
+    (!defined(VP_USE_COLOR_ANSI) && !defined(VP_USE_COLOR_WOE32))
 #warning "Using `VP_USE_COLOR' as a feature flag is deprecated.  " \
          "Assuming you meant `VP_USE_COLOR_ANSI'."
 #define VP_USE_COLOR_ANSI
-#endif /* VP_USE_COLOR && ! VP_USE_COLOR_ANSI */
+#endif /* VP_USE_COLOR && ! VP_USE_COLOR_[...] */
 
 /* For `#if' directives which do not depend on the type of
  * colour output enabled (i.e. the usage message) */
-#if defined(VP_USE_COLOR_ANSI) && !defined(VP_USE_COLOR)
+#if !defined(VP_USE_COLOR) && \
+    (defined(VP_USE_COLOR_ANSI) || defined(VP_USE_COLOR_WOE32))
 #define VP_USE_COLOR
-#endif /* VP_USE_COLOR_ANSI && ! VP_USE_COLOR */
+#endif /* ! VP_USE_COLOR && VP_USE_COLOR_[...] */
+
+/* TODO: check for more than one `VP_USE_COLOR_[...]' being defined */
 
 #define LENGTH_MIN          1
 #define LENGTH_MAX          RAND_MAX
@@ -40,13 +49,20 @@
 #define HEAD_CHAR           "D"
 #define EJAC_CHAR           "~"
 
-#ifdef VP_USE_COLOR_ANSI
+#if defined(VP_USE_COLOR_ANSI)
 #define SCROTUM_COLOR_ANSI  "\33[33m"       /* yellow */
 #define SHAFT_COLOR_ANSI    "\33[1m\33[33m" /* bright yellow */
 #define HEAD_COLOR_ANSI     "\33[1m\33[31m" /* bright red */
 #define EJAC_COLOR_ANSI     "\33[1m\33[37m" /* bright white */
 #define RESET_CODE_ANSI     "\33[0m"
-#endif /* VP_USE_COLOR_ANSI */
+#elif defined(VP_USE_COLOR_WOE32)
+#define SCROTUM_COLOR_WOE32 FOREGROUND_RED | FOREGROUND_GREEN
+#define SHAFT_COLOR_WOE32   FOREGROUND_RED | FOREGROUND_GREEN | \
+                            FOREGROUND_INTENSITY
+#define HEAD_COLOR_WOE32    FOREGROUND_RED | FOREGROUND_INTENSITY
+#define EJAC_COLOR_WOE32    FOREGROUND_RED | FOREGROUND_GREEN | \
+			    FOREGROUND_BLUE | FOREGROUND_INTENSITY
+#endif /* VP_USE_COLOR_[...] */
 
 #ifdef VP_USE_FULLWIDTH
 #define SCROTUM_CHAR_UTF8   "８"
