@@ -31,6 +31,10 @@ int main(int argc, char *argv[])
 	struct timeval current_time;
 #endif /* VP_USE_POSIXTIME */
 
+#ifdef VP_NO_ARGV
+	char options_input[MAX_LINE];
+#endif /* VP_NO_ARGV */
+
 #ifdef VP_USE_GETTEXT
 	/* Get locale from environment */
 	setlocale(LC_ALL, "");
@@ -57,7 +61,15 @@ int main(int argc, char *argv[])
 
 	flags = NO_FLAGS;
 
-	options = parse_options(&argc, &argv);
+	/* If system doesn't use argv, get options via user input */
+#ifdef VP_NO_ARGV
+	printf("Options line (-h for help): ");
+	fgets(options_input, MAX_LINE, stdin);
+	options = parse_options_line(options_input);
+#else /* VP_NO_ARGV */
+	options = parse_options(argc, argv);
+#endif /* VP_NO_ARGV */
+
 	if (options.flags & OPT_COLOR) { flags |= COLOR; }
 	if (options.flags & OPT_FULLWIDTH) { flags |= FULLWIDTH; }
 

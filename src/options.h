@@ -25,6 +25,12 @@
 #define OPTION_CHAR '-'
 #endif /* ! OPTION_CHAR */
 
+/* Prevent buffer overflow in `parse_options_line()' */
+#ifdef VP_NO_ARGV
+#define MAX_ARGS 10
+#define MAX_LINE 40
+#endif /* VP_NO_ARGV */
+
 enum OPTIONS_E {
 	NO_OPTS      = 0,
 	OPT_HELP     = 1,  /* Print help message to stdout */
@@ -59,6 +65,10 @@ struct OPTIONS_S {
 	char error_char;
 };
 
-struct OPTIONS_S parse_options(int *argc, char **argv[]);
+struct OPTIONS_S parse_options(int argc, char *argv[]);
+
+#ifdef VP_NO_ARGV
+struct OPTIONS_S parse_options_line(char input[MAX_LINE]);
+#endif /* VP_NO_ARGV */
 
 #endif /* ! VP_OPTIONS_H */

@@ -11,6 +11,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef VP_NO_ARGV
+#include <stdio.h>
+#endif /* VP_NO_ARGV */
+
 /* For use on non-POSIX systems with some
  * sort of separate getopt implementation */
 #ifdef VP_USE_GETOPT_H
@@ -21,7 +25,7 @@
 
 #include "options.h"
 
-struct OPTIONS_S parse_options(int *argc, char **argv[])
+struct OPTIONS_S parse_options(int argc, char *argv[])
 { 
 	struct OPTIONS_S options;
 
@@ -38,7 +42,7 @@ struct OPTIONS_S parse_options(int *argc, char **argv[])
 	options.error_char = '!'; /* placeholder */
 
 	opterr = 0;
-	while ((ch = getopt(*argc, *argv, GETOPT_OPTIONS_STRING)) != -1)
+	while ((ch = getopt(argc, argv, GETOPT_OPTIONS_STRING)) != -1)
 		switch (ch) {
 #ifdef VP_USE_COLOR
 			case 'c':
@@ -107,3 +111,24 @@ struct OPTIONS_S parse_options(int *argc, char **argv[])
 	
 	return options;
 }
+
+#ifdef VP_NO_ARGV
+struct OPTIONS_S parse_options_line(char input[MAX_LINE])
+{
+	int argc;
+	char *argv[MAX_ARGS];
+	char *tmp;
+
+	/* I don't understand how it works either, but I did it */
+	argc = 1;
+	tmp = strtok(input, " \n");
+	while (tmp != NULL && argc < MAX_ARGS) {
+		argv[argc] = tmp;
+		argc++;
+		tmp = strtok(NULL, " \n");
+	}
+	argv[argc] = 0;
+
+	return parse_options(argc, argv);
+}
+#endif /* VP_NO_ARGV */
