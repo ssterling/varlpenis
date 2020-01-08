@@ -5,6 +5,8 @@
  * See `LICENSE' file for copyright information.
  */
 
+#include "draw.h" /* some VP_USE_... macros */
+
 #ifndef VP_OPTIONS_H
 #define VP_OPTIONS_H
 
@@ -28,7 +30,11 @@ enum OPTIONS_E {
 	OPT_HELP     = 1,  /* Print help message to stdout */
 	OPT_VERSION  = 2,  /* Print version info */
 	OPT_LENGTH   = 4,  /* The length was specified */
-	OPT_DISTANCE = 8   /* The distance was specified */
+	OPT_DISTANCE = 8,  /* The distance was specified */
+
+	/* see `draw.h' DRAW_FLAGS_E */
+	OPT_COLOR    = 16, /* Use color */
+	OPT_FULLWIDTH= 32  /* Output fullwidth */
 };
 
 enum OPTIONS_ERROR_E {
@@ -52,5 +58,7 @@ struct OPTIONS_S {
 	enum OPTIONS_ERROR_E error_code;
 	char error_char;
 };
+
+struct OPTIONS_S parse_options(int *argc, char **argv[]);
 
 #endif /* ! VP_OPTIONS_H */

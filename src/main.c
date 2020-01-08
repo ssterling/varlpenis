@@ -1,3 +1,4 @@
+
 /**
  * varlpenis - Generate ASCII-art penis of arbitrary length
  * Seth Price <https://www.gitlab.com/ssterling/varlpenis>
@@ -6,20 +7,9 @@
  */
 
 #include <ctype.h>
-#include <errno.h>
 #include <limits.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <time.h>
-
-/* For use on non-POSIX systems with some
- * sort of separate getopt implementation */
-#ifdef VP_USE_GETOPT_H
-#include <getopt.h>
-#else /* VP_USE_GETOPT_H */
-#include <unistd.h>
-#endif /* VP_USE_GETOPT_H */
 
 #ifdef VP_USE_POSIXTIME
 #include <sys/time.h>
@@ -36,13 +26,6 @@ int main(int argc, char *argv[])
 	unsigned int length, distance;
 	enum DRAW_FLAGS_E flags;
 	struct OPTIONS_S options;
-
-	/* Stuff for getopt */
-	int index;
-	int ch;
-
-	/* For the `strtol()` shenanigans below */
-	long int strtol_tmp;
 
 #ifdef VP_USE_POSIXTIME
 	struct timeval current_time;
@@ -74,80 +57,9 @@ int main(int argc, char *argv[])
 
 	flags = NO_FLAGS;
 
-	options.flags = NO_OPTS;
-	options.error_code = ERR_OK;
-	options.length = 0;
-	options.distance = 0;
-	options.error_char = '!'; /* placeholder */
-
-	opterr = 0;
-	while ((ch = getopt(argc, argv, GETOPT_OPTIONS_STRING)) != -1)
-		switch (ch) {
-#ifdef VP_USE_COLOR
-			case 'c':
-				flags |= COLOR;
-				break;
-#endif /* VP_USE_COLOR */
-			case 'd': /* Alias for `-e' */
-			case 'e':
-				errno = 0;
-				strtol_tmp = 0;
-				strtol_tmp = strtol(optarg, NULL, 0);
-				if ((strtol_tmp == LONG_MAX && errno == ERANGE)
-				    || (strtol_tmp > UINT_MAX)) {
-					options.error_code = ERR_BIGUINT;
-					options.error_char = 'e';
-					goto BREAK_FROM_GETOPT;
-				} else if (strtol_tmp < 0) {
-					options.error_code = ERR_NOTINT;
-					options.error_char = 'e';
-					goto BREAK_FROM_GETOPT;
-				}
-				options.flags |= OPT_DISTANCE;
-				options.distance = (unsigned int)strtol_tmp;
-				break;
-#ifdef VP_USE_FULLWIDTH
-			case 'f':
-				flags |= FULLWIDTH;
-				break;
-#endif /* VP_USE_FULLWIDTH */
-			case 'h':
-				options.flags |= OPT_HELP;
-				break;
-			case 'l':
-				errno = 0;
-				strtol_tmp = 0;
-				strtol_tmp = strtol(optarg, NULL, 0);
-				if ((strtol_tmp == LONG_MAX && errno == ERANGE)
-				    || (strtol_tmp > UINT_MAX)) {
-					options.error_code = ERR_BIGUINT;
-					options.error_char = 'l';
-					goto BREAK_FROM_GETOPT;
-				} else if (strtol_tmp < 1) {
-					options.error_code = ERR_NOTINT;
-					options.error_char = 'l';
-					goto BREAK_FROM_GETOPT;
-				}
-				options.flags |= OPT_LENGTH;
-				options.length = (unsigned int)strtol_tmp;
-				break;
-			case 'v':
-				options.flags |= OPT_VERSION;
-				break;
-			case '?':
-				if (optopt == 'e' || optopt == 'l') {
-					options.error_code = ERR_NOARG;
-					options.error_char = (char)optopt;
-				} else {
-					options.error_code = ERR_UNKNOWNCHAR;
-					options.error_char = (char)optopt;
-				}
-				goto BREAK_FROM_GETOPT;
-			default:
-				/* Nothing happened...? */
-				break;
-		};
-	BREAK_FROM_GETOPT:
+	options = parse_options(&argc, &argv);
+	if (options.flags & OPT_COLOR) { flags |= COLOR; }
+	if (options.flags & OPT_FULLWIDTH) { flags |= FULLWIDTH; }
 
 	switch (options.error_code) {
 		case ERR_OK:
@@ -229,3 +141,4 @@ int main(int argc, char *argv[])
 
 	return EX_OK;
 }
+
