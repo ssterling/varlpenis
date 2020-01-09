@@ -42,8 +42,9 @@ $ make
 ```
 
 Should work on UNIX-like systems with no modification.
-Instructions for MS-DOS and Windows can be found in [doc/](doc);
-support for other, more unique systems may be coming in the future.
+Instructions for MS-DOS and Windows can be found in [doc/](doc/).
+Likewise, (unsupported) tutorials for obsolete and/or obscure systems
+can be found in [doc/retro-platforms/](doc/retro-platforms/).
 
 ### Configuration
 
