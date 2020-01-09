@@ -65,9 +65,9 @@ int main(int argc, char *argv[])
 #ifdef VP_NO_ARGV
 	printf("Options line (-h for help): ");
 	fgets(options_input, MAX_LINE, stdin);
-	options = parse_options_line(options_input);
+	parse_options_line(options_input, &options);
 #else /* VP_NO_ARGV */
-	options = parse_options(argc, argv);
+	parse_options(argc, argv, &options);
 #endif /* VP_NO_ARGV */
 
 	if (options.flags & OPT_COLOR) { flags |= COLOR; }

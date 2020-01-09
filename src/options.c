@@ -25,28 +25,26 @@
 
 #include "options.h"
 
-struct OPTIONS_S parse_options(int argc, char *argv[])
+void parse_options(int argc, char *argv[], struct OPTIONS_S *options)
 { 
-	struct OPTIONS_S options;
-
 	int index;
 	int ch;
 
 	/* For the `strtol()` shenanigans below */
 	long int strtol_tmp;
 
-	options.flags = NO_OPTS;
-	options.error_code = ERR_OK;
-	options.length = 0;
-	options.distance = 0;
-	options.error_char = '!'; /* placeholder */
+	options->flags = NO_OPTS;
+	options->error_code = ERR_OK;
+	options->length = 0;
+	options->distance = 0;
+	options->error_char = '!'; /* placeholder */
 
 	opterr = 0;
 	while ((ch = getopt(argc, argv, GETOPT_OPTIONS_STRING)) != -1)
 		switch (ch) {
 #ifdef VP_USE_COLOR
 			case 'c':
-				options.flags |= OPT_COLOR;
+				options->flags |= OPT_COLOR;
 				break;
 #endif /* VP_USE_COLOR */
 			case 'd': /* Alias for `-e' */
@@ -56,24 +54,24 @@ struct OPTIONS_S parse_options(int argc, char *argv[])
 				strtol_tmp = strtol(optarg, NULL, 0);
 				if ((strtol_tmp == LONG_MAX && errno == ERANGE)
 				    || (strtol_tmp > UINT_MAX)) {
-					options.error_code = ERR_BIGUINT;
-					options.error_char = 'e';
-					return options;
+					options->error_code = ERR_BIGUINT;
+					options->error_char = 'e';
+					return;
 				} else if (strtol_tmp < 0) {
-					options.error_code = ERR_NOTINT;
-					options.error_char = 'e';
-					return options;
+					options->error_code = ERR_NOTINT;
+					options->error_char = 'e';
+					return;
 				}
-				options.flags |= OPT_DISTANCE;
-				options.distance = (unsigned int)strtol_tmp;
+				options->flags |= OPT_DISTANCE;
+				options->distance = (unsigned int)strtol_tmp;
 				break;
 #ifdef VP_USE_FULLWIDTH
 			case 'f':
-				options.flags |= OPT_FULLWIDTH;
+				options->flags |= OPT_FULLWIDTH;
 				break;
 #endif /* VP_USE_FULLWIDTH */
 			case 'h':
-				options.flags |= OPT_HELP;
+				options->flags |= OPT_HELP;
 				break;
 			case 'l':
 				errno = 0;
@@ -81,39 +79,39 @@ struct OPTIONS_S parse_options(int argc, char *argv[])
 				strtol_tmp = strtol(optarg, NULL, 0);
 				if ((strtol_tmp == LONG_MAX && errno == ERANGE)
 				    || (strtol_tmp > UINT_MAX)) {
-					options.error_code = ERR_BIGUINT;
-					options.error_char = 'l';
-					return options;
+					options->error_code = ERR_BIGUINT;
+					options->error_char = 'l';
+					return;
 				} else if (strtol_tmp < 1) {
-					options.error_code = ERR_NOTINT;
-					options.error_char = 'l';
-					return options;
+					options->error_code = ERR_NOTINT;
+					options->error_char = 'l';
+					return;
 				}
-				options.flags |= OPT_LENGTH;
-				options.length = (unsigned int)strtol_tmp;
+				options->flags |= OPT_LENGTH;
+				options->length = (unsigned int)strtol_tmp;
 				break;
 			case 'v':
-				options.flags |= OPT_VERSION;
+				options->flags |= OPT_VERSION;
 				break;
 			case '?':
 				if (optopt == 'e' || optopt == 'l') {
-					options.error_code = ERR_NOARG;
-					options.error_char = (char)optopt;
+					options->error_code = ERR_NOARG;
+					options->error_char = (char)optopt;
 				} else {
-					options.error_code = ERR_UNKNOWNCHAR;
-					options.error_char = (char)optopt;
+					options->error_code = ERR_UNKNOWNCHAR;
+					options->error_char = (char)optopt;
 				}
-				return options;
+				return;
 			default:
 				/* Nothing happened...? */
 				break;
 		};
 	
-	return options;
+	return;
 }
 
 #ifdef VP_NO_ARGV
-struct OPTIONS_S parse_options_line(char input[MAX_LINE])
+void parse_options_line(char input[MAX_LINE], struct OPTIONS_S *options)
 {
 	int argc;
 	char *argv[MAX_ARGS];
@@ -129,6 +127,8 @@ struct OPTIONS_S parse_options_line(char input[MAX_LINE])
 	}
 	argv[argc] = 0;
 
-	return parse_options(argc, argv);
+	parse_options(argc, argv, options);
+
+	return;
 }
 #endif /* VP_NO_ARGV */

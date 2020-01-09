@@ -65,10 +65,10 @@ struct OPTIONS_S {
 	char error_char;
 };
 
-struct OPTIONS_S parse_options(int argc, char *argv[]);
+void parse_options(int argc, char *argv[], struct OPTIONS_S *options);
 
 #ifdef VP_NO_ARGV
-struct OPTIONS_S parse_options_line(char input[MAX_LINE]);
+void parse_options_line(char input[MAX_LINE], struct OPTIONS_S *options);
 #endif /* VP_NO_ARGV */
 
 #endif /* ! VP_OPTIONS_H */
