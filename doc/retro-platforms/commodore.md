@@ -49,6 +49,7 @@ The following macros may be set as needed:
 
 | Macro                 | Definition                                          |
 |----------------------:|-----------------------------------------------------|
+| `VP_USE_COLOR_CONIO`  | Set to enable color output via cc65 `conio.h`       |
 | `VP_NO_ARGV`          | Enables inputting options without a shell           |
 | `VP_VERSION_STR`      | Define with program version as seen in `configure`  |
 
@@ -56,7 +57,7 @@ Finally, you should be able compile the program.
 Below is an example command for Commodore 128:
 
 ```console
-smp@sakura:~/programs/varlpenis/src $ cl65 -O -t c128 -o varlpenis -D VP_NO_ARGV -D VP_VERSION_STR=\"2.1-C128\" main.c draw.c options.c
+smp@sakura:~/programs/varlpenis/src $ cl65 -O -t c128 -o varlpenis -D VP_USE_COLOR_CONIO -D VP_NO_ARGV -D VP_VERSION_STR=\"2.1-C128\" main.c draw.c options.c
 ```
 
 I'll leave loading the executable onto tape/disk to you, the user who

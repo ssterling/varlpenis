@@ -9,11 +9,6 @@
 #include <stdlib.h>
 
 /* For colour definitions */
-#ifdef VP_USE_COLOR_CONIO
-#include <conio.h>
-#endif /* VP_USE_COLOR_CONIO */
-
-/* Also for colour definitions */
 #ifdef VP_USE_COLOR_WOE32
 #include <windows.h>
 #endif /* VP_USE_COLOR_WOE32 */
@@ -63,10 +58,26 @@
 #define EJAC_COLOR_ANSI     "\33[1m\33[37m" /* bright white */
 #define RESET_CODE_ANSI     "\33[0m"
 #elif defined(VP_USE_COLOR_CONIO)
-#define SCROTUM_COLOR_CONIO BROWN
-#define SHAFT_COLOR_CONIO   YELLOW
-#define HEAD_COLOR_CONIO    LIGHTRED
-#define EJAC_COLOR_CONIO    WHITE
+
+/* Accounting for Commodore colors in cc65 `conio.h' */
+#if defined(__VIC20__)
+#define SCROTUM_COLOR_CONIO 0x9 /* orange */
+#define SHAFT_COLOR_CONIO   0x7 /* yellow */
+#define HEAD_COLOR_CONIO    0xC /* light red */
+#define EJAC_COLOR_CONIO    0x1 /* white */
+#elif defined(__C64__) || defined(__C128__)
+#define SCROTUM_COLOR_CONIO 0x8 /* orange */
+#define SHAFT_COLOR_CONIO   0x8 /* yellow */
+#define HEAD_COLOR_CONIO    0x2 /* red */
+#define EJAC_COLOR_CONIO    0x1 /* white */
+#else /* __VIC20__ || (__C64__ || __C128__)*/
+/* Assume MS-DOS `conio.h' and/or VGA colour codes */
+#define SCROTUM_COLOR_CONIO 0x6 /* yellow */
+#define SHAFT_COLOR_CONIO   0xE /* bright yellow */
+#define HEAD_COLOR_CONIO    0xC /* bright red */
+#define EJAC_COLOR_CONIO    0xF /* bright white */
+#endif /* __C64__ */
+
 #elif defined(VP_USE_COLOR_WOE32)
 #define SCROTUM_COLOR_WOE32 FOREGROUND_RED | FOREGROUND_GREEN
 #define SHAFT_COLOR_WOE32   FOREGROUND_RED | FOREGROUND_GREEN | \

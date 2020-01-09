@@ -48,7 +48,10 @@ void draw_penis(const unsigned int length, const unsigned int distance,
                 const enum DRAW_FLAGS_E flags)
 {
 #ifdef VP_USE_COLOR_CONIO
+#if defined(__TURBOC__) || defined(__BORLANDC__)
 	struct text_info old_text_info;
+#endif /* __TURBOC__ || __BORLANDC__ */
+	int old_text_color;
 #endif /* VP_USE_COLOR_CONIO */
 
 #ifdef VP_USE_COLOR_WOE32
@@ -74,7 +77,13 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 	}
 #elif defined(VP_USE_COLOR_CONIO)
 	if ((flags & FULLWIDTH) && (flags & COLOR)) {
+		/* Save current text color */
+#if defined(__TURBOC__) || defined(__BORLANDC__)
 		gettextinfo(&old_text_info);
+		old_text_color = old_text_info.attribute;
+#elif defined(__CC65__)
+		old_text_color = (int)cpeekcolor(); /* at current cursor pos */
+#endif /* (__TURBOC__ || __BORLANDC__) || __CC65__ */
 
 		textcolor(SCROTUM_COLOR_CONIO);
 		cprintf("%s", SCROTUM_CHAR_UTF8);
@@ -84,7 +93,8 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 		cprintf("%s", HEAD_CHAR_UTF8);
 		textcolor(EJAC_COLOR_CONIO);
 		cprintf("%s", repeat_string(EJAC_CHAR_UTF8, length));
-		textcolor(old_text_info.attribute);
+		textcolor(old_text_color);
+
 		return;
 	}
 #elif defined(VP_USE_COLOR_WOE32)
@@ -129,7 +139,13 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 	}
 #elif defined(VP_USE_COLOR_CONIO)
 	if (flags & COLOR) {
+		/* Save current text color */
+#if defined(__TURBOC__) || defined(__BORLANDC__)
 		gettextinfo(&old_text_info);
+		old_text_color = old_text_info.attribute;
+#elif defined(__CC65__)
+		old_text_color = (int)cpeekcolor(); /* at current cursor pos */
+#endif /* (__TURBOC__ || __BORLANDC__) || __CC65__ */
 
 		textcolor(SCROTUM_COLOR_CONIO);
 		cprintf("%s", SCROTUM_CHAR);
@@ -139,7 +155,7 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 		cprintf("%s", HEAD_CHAR);
 		textcolor(EJAC_COLOR_CONIO);
 		cprintf("%s", repeat_string(EJAC_CHAR, length));
-		textcolor(old_text_info.attribute);
+		textcolor(old_text_color);
 		return;
 	}
 #elif defined(VP_USE_COLOR_WOE32)
