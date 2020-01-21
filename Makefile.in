@@ -12,7 +12,7 @@
 # undocumented
 DEBUG_CFLAGS = -g -O0 -std=c89 -pedantic # works with Clang
 
-C_FILES = ${SRCDIR}/main.c ${SRCDIR}/draw.c
+C_FILES = ${SRCDIR}/main.c ${SRCDIR}/draw.c ${SRCDIR}/options.c
 
 .PHONY: all install install-strip install-bin install-bin-strip \
 	install-docs uninstall uninstall-bin uninstall-docs check clean
