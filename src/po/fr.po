@@ -1,12 +1,12 @@
 # Translation file for varlpenis
-# Copyright 2019 Seth Price
+# Copyright 2019, 2020 Seth Price
 # This file is distributed under the same license as the varlpenis package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: varlpenis\n"
 "Report-Msgid-Bugs-To: ssterling@firemail.cc\n"
-"POT-Creation-Date: 2019-12-20 21:08-0500\n"
+"POT-Creation-Date: 2020-01-22 11:11-0500\n"
 "PO-Revision-Date: 2019-12-20 21:08-0500\n"
 "Last-Translator: Seth Price <ssterling@firemail.cc>\n"
 "Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
@@ -16,82 +16,83 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/main.c:198
+#: ../main.c:80
 #, c-format
-msgid "    -c       output color\n"
-msgstr "    -c       sortir en couleur\n"
+msgid "Error: option `%c%c' requires a positive integer as an argument\n"
+msgstr ""
+"Erreur : l'option `%c%c' nécessite un paramètre qui est un entier positif\n"
 
-#: src/main.c:200
+#: ../main.c:85
 #, c-format
-msgid "    -e num   set length of semen string\n"
-msgstr "    -e num   fixer la longueur du sperme\n"
+msgid "Error: argument to option `%c%c' must be a positive integer\n"
+msgstr "Erreur : le paramètre de l'option `%c%c' doit être un entier positif\n"
 
-#: src/main.c:202
+#: ../main.c:90
 #, c-format
-msgid "    -f       output fullwidth characters\n"
-msgstr "    -f       sortir des caractères pleine chasse\n"
+msgid "Error: argument to option `%c%c' must be zero or a positive integer\n"
+msgstr ""
+"Erreur : le paramètre de l'option `%c%c' doit être zéro ou un entier positif\n"
 
-#: src/main.c:204
+#: ../main.c:95
 #, c-format
-msgid "    -h       show this message\n"
-msgstr "    -h       afficher ce message\n"
+msgid "Error: argument to option `%c%c' is too large (above `UINT_MAX').\n"
+msgstr ""
+"Erreur : le paramètre de l'option `%c%c' est trop grand (plus de `UINT_MAX')\n"
 
-#: src/main.c:205
+#: ../main.c:101
 #, c-format
-msgid "    -l num   set length of shaft\n"
-msgstr "    -l num   fixer la longueur du corps\n"
+msgid "Error: unknown option `%c%c'\n"
+msgstr "Erreur : option inconnue `%c%c'\n"
 
-#: src/main.c:206
+#: ../main.c:104
 #, c-format
-msgid "    -v       show copyright and version info\n"
-msgstr "    -v       afficher informations de copyright et version\n"
+msgid "Error: unknown option char `\\x%X'\n"
+msgstr "Erreur : caractère d'option inconnu `\\x%X'\n"
 
-#: src/main.c:164
-#, c-format
-msgid "Error: argument to option `-%c' is too large (above `UINT_MAX').\n"
-msgstr "Erreur : le paramètre de l'option `-%c' est trop grand (plus de `UINT_MAX')\n"
-
-#: src/main.c:154
-#, c-format
-msgid "Error: argument to option `-%c' must be a positive integer\n"
-msgstr "Erreur : le paramètre de l'option `-%c' doit être un entier positif\n"
-
-#: src/main.c:159
-#, c-format
-msgid "Error: argument to option `-%c' must be zero or a positive integer\n"
-msgstr "Erreur : le paramètre de l'option `-%c' doit être zéro ou un entier positif\n"
-
-#: src/main.c:178
+#: ../main.c:109
 #, c-format
 msgid "Error: bogus error code received from options parser\n"
 msgstr "Erreur : faux code d'erreur de l'analyseur a été reçu\n"
 
-#: src/main.c:149
-#, c-format
-msgid "Error: option `-%c' requires a positive integer as an argument\n"
-msgstr "Erreur : l'option `-%c' nécessite un paramètre qui est un entier positif\n"
-
-#: src/main.c:170
-#, c-format
-msgid "Error: unknown option `-%c'\n"
-msgstr "Erreur : option inconnue `-%c'\n"
-
-#: src/main.c:173
-#, c-format
-msgid "Error: unknown option char `\\x%x'\n"
-msgstr "Erreur : caractère d'option inconnu `\\x%x'\n"
-
-#: src/strings.h:15
-msgid "Generate an ASCII-art penis of arbitrary length"
-msgstr "Générer de l'ASCII-art de n'importe quelle longeur"
-
-#. XXX This is a very weird way to implement a dynamically compiled
-#. help message, but it's the only working one I could think of
-#: src/main.c:194
+#: ../main.c:125
 #, c-format
 msgid ""
 "usage: %s [options]\n"
 "  options:\n"
 msgstr ""
 "usage : %s [options]\n"
-"  les options:\n"
+"  les options :\n"
+
+#: ../main.c:129
+#, c-format
+msgid "    %cc       output color\n"
+msgstr "    %cc       sortir en couleur\n"
+
+#: ../main.c:131
+#, c-format
+msgid "    %ce num   set length of semen string\n"
+msgstr "    -e num   fixer la longueur du sperme\n"
+
+#: ../main.c:134
+#, c-format
+msgid "    %cf       output fullwidth characters\n"
+msgstr "    %cf       sortir des caractères pleine chasse\n"
+
+#: ../main.c:137
+#, c-format
+msgid "    %ch       show this message\n"
+msgstr "    %ch       afficher ce message\n"
+
+#: ../main.c:138
+#, c-format
+msgid "    %cl num   set length of shaft\n"
+msgstr "    %cl num   fixer la longueur du corps\n"
+
+#: ../main.c:139
+#, c-format
+msgid "    %cv       show copyright and version info\n"
+msgstr "    %cv       afficher informations de copyright et version\n"
+
+#: ../strings.h:13
+msgid "Generate an ASCII-art penis of arbitrary length"
+msgstr "Générer de l'ASCII-art de n'importe quelle longeur"
