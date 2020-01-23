@@ -50,15 +50,9 @@ int main(int argc, char *argv[])
 	srand((unsigned)time(NULL));
 #endif /* VP_USE_POSIXTIME */
 	
-	/* Initialise length and distance to random numbers, override-able
-	 * via program arguments */
-	length =
-	  (rand() / 100) % (RAND_LENGTH_MAX - RAND_LENGTH_MIN)
-	  + RAND_LENGTH_MIN;
-	distance =
-	  (rand() / 100) % (RAND_DISTANCE_MAX - RAND_DISTANCE_MIN)
-	  + RAND_DISTANCE_MIN;
-
+	/* Initialise some variables to avoid undefined behaviour */
+	length = 4;
+	distance = 2;
 	flags = NO_FLAGS;
 
 	/* If system doesn't use argv, get options via user input */
@@ -142,11 +136,23 @@ int main(int argc, char *argv[])
 	if (options.flags & OPT_HELP || options.flags & OPT_VERSION)
 		return EX_OK;
 
-	/* If these flags are set, length/distance are user-specified */
-	if (options.flags & OPT_LENGTH)
+	/* If these flags are set, length/distance are user-specified;
+	 * otherwise, use random values */
+	if (options.flags & OPT_LENGTH) {
 		length = options.length;
-	if (options.flags & OPT_DISTANCE)
+	} else {
+		length =
+		  (rand() / 100) % (RAND_LENGTH_MAX - RAND_LENGTH_MIN)
+		  + RAND_LENGTH_MIN;
+	}
+
+	if (options.flags & OPT_DISTANCE) {
 		distance = options.distance;
+	} else {
+		distance =
+		  (rand() / 100) % (RAND_DISTANCE_MAX - RAND_DISTANCE_MIN)
+		  + RAND_DISTANCE_MIN;
+	}
 
 	/* `draw_penis()' prints to stdout and returns nothing */
 	draw_penis(length, distance, flags);
