@@ -9,11 +9,19 @@
 #include <ctype.h>
 #include <limits.h>
 #include <stdio.h>
-#include <time.h>
 
-#ifdef VP_USE_POSIXTIME
+/* Quick check for mutually exclusive flags to avoid giving
+ * an aneurysm to users not using the configure script */
+#if defined(VP_NO_TIME) && defined(VP_USE_POSIXTIME)
+#error "Macros `VP_NO_TIME' and `VP_USE_POSIXTIME' are " \
+       "mutually exclusive."
+#endif /* VP_NO_TIME && VP_USE_POSIXTIME */
+
+#if defined(VP_USE_POSIXTIME)
 #include <sys/time.h>
-#endif /* VP_USE_POSIXTIME */
+#elif !defined(VP_NO_TIME)
+#include <time.h>
+#endif /* VP_USE_POSIXTIME || VP_NO_TIME */
 
 #include "draw.h"
 #include "options.h"
@@ -42,14 +50,39 @@ int main(int argc, char *argv[])
 	textdomain(VP_TEXTDOMAIN);
 #endif /* VP_USE_GETTEXT */
 	
-	/* Seed random number generator */
-#ifdef VP_USE_POSIXTIME
+	/* Seed random number generator (the method used to do which
+	 * pretty much depends on the system's `time()' support) */
+#if defined(VP_USE_POSIXTIME)
 	gettimeofday(&current_time, NULL);
 	srand((unsigned)current_time.tv_usec);
-#else /* VP_USE_POSIXTIME */
+#elif !defined(VP_NO_TIME)
+	/* Default method */
 	srand((unsigned)time(NULL));
-#endif /* VP_USE_POSIXTIME */
-	
+#elif defined(__C64__) || defined(__C128__)
+	/* Least significant byte of the current raster line */
+	srand(*(unsigned char*)0xD012);
+#elif defined(__PET__)
+	/* Least significant byte of the jiffy clock */
+	srand(*(unsigned char*)0x8F);
+#elif defined(__PLUS4__)
+	/* Least significant byte of the jiffy clock */
+	srand(*(unsigned char*)0xA5);
+#elif defined(__VIC20__)
+	/* Least significant byte of the jiffy clock */
+	srand(*(unsigned char*)0xA2);
+#elif defined(__CBM__)
+	/* Seconds element of the `TI$' variable */
+	srand(*(unsigned char*)0x07);
+#elif defined(__APPLE2__)
+	/* `KEYIN' routine loop number */
+	srand(*(unsigned char*)0x4E);
+#else /* VP_USE_POSIXTIME || !VP_NO_TIME || system types… */
+#warning "`VP_NO_TIME' is defined, but there appears to be no " \
+         "alternate solution to seed `srand()' for the target system.  " \
+	 "Seeding with the fixed value `69'."
+	srand(69);
+#endif /* VP_USE_POSIXTIME || !VP_NO_TIME || system types… */
+
 	/* Initialise some variables to avoid undefined behaviour */
 	length = 4;
 	distance = 2;

@@ -10,7 +10,8 @@ With no modification, varlpenis should cross-compile for these systems:
 * Commodore 64
 * Commodore 128
 
-With removal of RNG, varlpenis should cross-compile for the following as well:
+With the `VP_NO_TIME` macro defined, varlpenis should cross-compile
+for the following as well:
 * Commodore PET
 * CBM-II 600-series
 * Commodore Plus/4
@@ -34,13 +35,9 @@ To change this, simply change the value of the macro `EJAC_CHAR` in `draw.h`.
 ### Random number generation
 
 varlpenis relies on the `time()` function to seed `rand()`.
-For systems without a realtime clock, the program will
-simply refuse to compile as its libraries do not contain time functions.
-The simplest route of action is to remove the random number generation
-code in `main.c` and replace it with a fixed number.
-However, if you're eager enough to be reading this tutorial,
-there's a solid chance you already know of a way to implement RNG
-without `time()` on a Commodore machine.
+As this is unavailable on certain Commodore systems, you will have to
+define the macro `VP_NO_TIME` (only on said systems), which will force
+use of an alternate seed algorithm.
 
 Compiling
 ---------
@@ -51,13 +48,14 @@ The following macros may be set as needed:
 |----------------------:|-----------------------------------------------------|
 | `VP_USE_COLOR_CONIO`  | Set to enable color output via cc65 `conio.h`       |
 | `VP_NO_ARGV`          | Enables inputting options without a shell           |
+| `VP_NO_TIME`          | Use methods other than `time()` to seed `srand()`   |
 | `VP_VERSION_STR`      | Define with program version as seen in `configure`  |
 
 Finally, you should be able compile the program.
 Below is an example command for Commodore 128:
 
 ```console
-smp@sakura:~/programs/varlpenis/src $ cl65 -O -t c128 -o varlpenis -D VP_USE_COLOR_CONIO -D VP_NO_ARGV -D VP_VERSION_STR=\"2.1-C128\" main.c draw.c options.c
+smp@sakura:~/programs/varlpenis/src $ cl65 -O -t c128 -o varlpenis -D VP_USE_COLOR_CONIO -D VP_NO_ARGV -D VP_VERSION_STR=\"3.1-C128\" main.c draw.c options.c
 ```
 
 I'll leave loading the executable onto tape/disk to you, the user who
