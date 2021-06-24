@@ -1,0 +1,95 @@
+# Translation file for varlpenis
+# Copyright 2019, 2021 Seth Price, Kun Attila
+# This file is distributed under the same license as the varlpenis package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: varlpenis\n"
+"Report-Msgid-Bugs-To: ssterling@firemail.cc\n"
+"POT-Creation-Date: 2020-01-22 11:11-0500\n"
+"PO-Revision-Date: 2021-06-23 13:54+0200\n"
+"Last-Translator: Kun Attila <attila@attilakundev.com>\n"
+"Language-Team: Hungarian <translation-team-hu@lists.sourceforge.net>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../main.c:80
+#, c-format
+msgid "Error: option `%c%c' requires a positive integer as an argument\n"
+msgstr "Hiba: `%c%c' opció elvár egy pozitív egész számot mint érték\n"
+
+#: ../main.c:85
+#, c-format
+msgid "Error: argument to option `%c%c' must be a positive integer\n"
+msgstr "Hiba: az értéknek pozitív egész számnak kell lennie `%c%c' opcióhoz\n"
+
+#: ../main.c:90
+#, c-format
+msgid "Error: argument to option `%c%c' must be zero or a positive integer\n"
+msgstr "Hiba: az értéknek nullának vagy pozitív egész számnak kell lennie `%c%c' opcióhoz\n"
+
+#: ../main.c:95
+#, c-format
+msgid "Error: argument to option `%c%c' is too large (above `UINT_MAX').\n"
+msgstr "Hiba: a megadott érték `%c%c' túl nagy (`UINT_MAX' fölött).\n"
+
+#: ../main.c:101
+#, c-format
+msgid "Error: unknown option `%c%c'\n"
+msgstr "Hiba: ismeretlen opció `%c%c'\n"
+
+#: ../main.c:104
+#, c-format
+msgid "Error: unknown option char `\\x%X'\n"
+msgstr "Hiba: ismeretlen opció karakter `\\x%X'\n"
+
+#: ../main.c:109
+#, c-format
+msgid "Error: bogus error code received from options parser\n"
+msgstr "Hiba: hamis hiba kód érkezett az opciók parszerjétől\n"
+
+#: ../main.c:125
+#, c-format
+msgid ""
+"usage: %s [options]\n"
+"  options:\n"
+msgstr ""
+"használat: %s [opciók]\n "
+"  opciók: \n"
+
+#: ../main.c:129
+#, c-format
+msgid "    %cc       output color\n"
+msgstr "    %cc       kimeneti szín\n"
+
+#: ../main.c:131
+#, c-format
+msgid "    %ce num   set length of semen string\n"
+msgstr "    %ce num   sperma string hosszának beállítása\n"
+
+#: ../main.c:134
+#, c-format
+msgid "    %cf       output fullwidth characters\n"
+msgstr  "    %cf       teljes szélességű (fullwidth) karakterekkel jelenítse meg\n"
+
+#: ../main.c:137
+#, c-format
+msgid "    %ch       show this message\n"
+msgstr "    %ch       segítség megjelenítése (ez az üzenet)\n"
+
+#: ../main.c:138
+#, c-format
+msgid "    %cl num   set length of shaft\n"
+msgstr "    %cl num   test hossz beállítása\n"
+
+#: ../main.c:139
+#, c-format
+msgid "    %cv       show copyright and version info\n"
+msgstr "    %cv       szerzői jogok és verzió információ mutatása\n"
+
+#: ../strings.h:13
+msgid "Generate an ASCII-art penis of arbitrary length"
+msgstr "Tetszőleges hosszú ASCII pénisz generálása"

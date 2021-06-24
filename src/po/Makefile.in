@@ -9,7 +9,7 @@
 POT_INPUT_FILES = ${SRCDIR}/main.c ${SRCDIR}/strings.h
 
 # Essentially a list of languages supported
-PO_FILES = ${SRCDIR}/po/fr.po ${SRCDIR}/po/ja.po
+PO_FILES = ${SRCDIR}/po/fr.po ${SRCDIR}/po/ja.po ${SRCDIR}/po/hu.po
 
 .PHONY: rebuild-po-files build-mo-files install-mo-files \
 	uninstall-mo-files clean-mo-files
