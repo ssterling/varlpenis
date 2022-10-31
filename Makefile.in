@@ -27,27 +27,27 @@ install: install-bin install-docs ${INSTALL_MO} ## Install all files
 install-strip: install-bin-strip install-docs ${INSTALL_MO} ## Install all files and strip binary executable
 
 install-bin: varlpenis ## Install binary executable
-	${INSTALL_DIR} ${BINDIR}
-	${INSTALL_PROGRAM} varlpenis ${BINDIR}
+	${INSTALL_DIR} ${DESTDIR}${BINDIR}
+	${INSTALL_PROGRAM} varlpenis ${DESTDIR}${BINDIR}
 
 install-bin-strip: varlpenis ## Install stripped binary executable
-	${INSTALL_DIR} ${BINDIR}
-	${INSTALL_PROGRAM_STRIP} varlpenis ${BINDIR}
+	${INSTALL_DIR} ${DESTDIR}${BINDIR}
+	${INSTALL_PROGRAM_STRIP} varlpenis ${DESTDIR}${BINDIR}
 
 install-docs: ## Install manpage
-	${INSTALL_DIR} ${MANDIR}/man6
-	${INSTALL_MAN} ${DOCDIR}/varlpenis.6 ${MANDIR}/man6/varlpenis.6
-	${INSTALL_DIR} ${DATADIR}/varlpenis
-	${INSTALL_DATA} 8=D.jpg ${DATADIR}/varlpenis/8=D.jpg
+	${INSTALL_DIR} ${DESTDIR}${MANDIR}/man6
+	${INSTALL_MAN} ${DOCDIR}/varlpenis.6 ${DESTDIR}${MANDIR}/man6/varlpenis.6
+	${INSTALL_DIR} ${DESTDIR}${DATADIR}/varlpenis
+	${INSTALL_DATA} 8=D.jpg ${DESTDIR}${DATADIR}/varlpenis/8=D.jpg
 
 uninstall: uninstall-bin uninstall-docs ${UNINSTALL_MO} ## Uninstall all items
 
 uninstall-bin: ## Uninstall varlpenis executable
-	${RM} ${BINDIR}/varlpenis
+	${RM} ${DESTDIR}${BINDIR}/varlpenis
 
 uninstall-docs: ## Uninstall manpage
-	${RM} ${MANDIR}/man6/varlpenis.6
-	${RM} ${DATADIR}/varlpenis
+	${RM} ${DESTDIR}${MANDIR}/man6/varlpenis.6
+	${RM} ${DESTDIR}${DATADIR}/varlpenis
 
 check: varlpenis ## Check basic functionality of output executable
 	${SHELL} ./check.sh

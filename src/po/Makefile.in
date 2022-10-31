@@ -53,17 +53,17 @@ build-mo-files: ${PO_FILES} ## Build translated message files for installation
 install-mo-files: build-mo-files ## Install translated message files
 	@for f in ${PO_FILES}; do \
 		lang=`echo $$f | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
-		echo "${INSTALL_DIR} ${LOCALEDIR}/$${lang}/LC_MESSAGES"; \
-		${INSTALL_DIR} ${LOCALEDIR}/$${lang}/LC_MESSAGES; \
-		echo "${INSTALL_DATA} ${SRCDIR}/po/$${lang}/LC_MESSAGES/varlpenis.mo ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo"; \
-		${INSTALL_DATA} ${SRCDIR}/po/$${lang}/LC_MESSAGES/varlpenis.mo ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo; \
+		echo "${INSTALL_DIR} ${DESTDIR}${LOCALEDIR}/$${lang}/LC_MESSAGES"; \
+		${INSTALL_DIR} ${DESTDIR}${LOCALEDIR}/$${lang}/LC_MESSAGES; \
+		echo "${INSTALL_DATA} ${SRCDIR}/po/$${lang}/LC_MESSAGES/varlpenis.mo ${DESTDIR}${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo"; \
+		${INSTALL_DATA} ${SRCDIR}/po/$${lang}/LC_MESSAGES/varlpenis.mo ${DESTDIR}${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo; \
 	done
 
 uninstall-mo-files: ## Uninstall translated message files
 	@for f in ${PO_FILES}; do \
 		lang=`echo $$f | sed -e 's,.*/,,' -e 's/\.po$$//'`; \
-		echo "${RM} ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo"; \
-		${RM} ${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo; \
+		echo "${RM} ${DESTDIR}${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo"; \
+		${RM} ${DESTDIR}${LOCALEDIR}/$${lang}/LC_MESSAGES/varlpenis.mo; \
 	done
 
 clean-mo-files: ## Remove generated message files

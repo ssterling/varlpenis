@@ -7,7 +7,7 @@
 
 # Package information
 pkg_name="varlpenis"
-pkg_version="3.0.1"
+pkg_version="3.0.2"
 
 # Error-reporting shenanigans
 log_w="warning"
