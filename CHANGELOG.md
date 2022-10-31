@@ -1,6 +1,13 @@
 Changelog
 =========
 
+3.0.1 (2022/10/31)
+------------------
+
+* Allow passing unrecognised arguments to configure script
+  using `--ignore-invalid-arguments` (useful for wrappers
+  expecting GNU Autoconf)
+
 3.0.0 (2020/04/12)
 ------------------
 

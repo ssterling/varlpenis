@@ -1,13 +1,13 @@
 #!/bin/sh
 # Configure script for varlpenis
-# Seth Price - updated 28 Mar 2019
+# Seth Price - updated 31 Oct 2022
 
 ###########################################################
 # VARIABLE INITIALISATION
 
 # Package information
 pkg_name="varlpenis"
-pkg_version="3.0.0"
+pkg_version="3.0.1"
 
 # Error-reporting shenanigans
 log_w="warning"
@@ -38,6 +38,7 @@ default_LDFLAGS=""
 helpme="no"
 is_verbose="no"
 is_quiet="no"
+is_permissive="no"
 ifndef_guards="yes"
 
 # Default feature values
@@ -60,6 +61,16 @@ fi
 
 ###########################################################
 # PARSE OPTIONS
+
+# Check for this first so that it can apply to arguments
+# which came before it on the command line
+for arg in "$@"; do
+	case $arg in
+		--ignore-invalid-arguments)
+			is_permissive="yes"
+			;;
+	esac
+done
 
 # The `us_' variables are left undefined unless specified as options
 for arg in "$@"; do
@@ -106,19 +117,23 @@ for arg in "$@"; do
 			is_verbose="yes"
 			;;
 		-*)
-			echo "$log_e: Unrecognised option \`$arg'.  Type \`$0 --help' for help." >&2
-			exit 1
+			if test "$is_permissive" = "no"; then
+				echo "$log_e: Unrecognised option \`$arg'.  Type \`$0 --help' for help." >&2
+				exit 1
+			fi
 			;;
 		*)
-			echo "$log_e: Stray argument \`$arg'.  Type \`$0 --help' for help." >&2
-			exit 1
+			if test "$is_permissive" = "no"; then
+				echo "$log_e: Stray argument \`$arg'.  Type \`$0 --help' for help." >&2
+				exit 1
+			fi
 			;;
 	esac
 done
 
 if test "$helpme" = "yes"; then
 	cat <<EOF
-Configure script for varlpenis, copyright 2019 Seth Price
+Configure script for varlpenis, copyright 2019, 2022 Seth Price
 Usage: ./configure [OPTION]... [VAR=VALUE]...
 
 To assign environment variables (e.g. CC, CFLAGS), specify them with
