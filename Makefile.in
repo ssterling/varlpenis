@@ -17,7 +17,7 @@ C_FILES = ${SRCDIR}/main.c ${SRCDIR}/draw.c ${SRCDIR}/options.c
 .PHONY: all install install-strip install-bin install-bin-strip \
 	install-docs uninstall uninstall-bin uninstall-docs check clean
 
-all: varlpenis tags ${BUILD_MO}
+all: varlpenis ${BUILD_MO}
 
 varlpenis: ## Build binary executable
 	${CC} ${CFLAGS} ${C_FILES} ${FEATURE_CFLAGS} -o varlpenis
