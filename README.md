@@ -41,7 +41,7 @@ $ make
 # make install
 ```
 
-Should work on UNIX-like systems with no modification.
+Should work on UNIX-like systems using BSD make with no modification.
 Instructions for MS-DOS and Windows can be found in [doc/](doc/).
 Likewise, (unsupported) tutorials for obsolete and/or obscure systems
 can be found in [doc/retro-platforms/](doc/retro-platforms/).
