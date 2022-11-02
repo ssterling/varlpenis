@@ -7,7 +7,7 @@
 
 # Package information
 pkg_name="varlpenis"
-pkg_version="3.0.2"
+pkg_version="3.0.3-dev"
 
 # Error-reporting shenanigans
 log_w="warning"
@@ -40,6 +40,7 @@ is_verbose="no"
 is_quiet="no"
 is_permissive="no"
 ifndef_guards="yes"
+use_lintl="yes"
 
 # Default feature values
 use_color="unset" #deprecated
@@ -392,7 +393,7 @@ if test "$use_gettext" = "yes"; then
 int main() { return 0; }
 _EOF
 	(eval $CC $CFLAGS conftest.c -o conftest) 2>conftest.err
-	rm -f conftest.o conftest.c conftest
+	rm -f conftest.o conftest
 	if test ! -s conftest.err; then
 		test "$is_quiet" = "no" && echo "found."
 		rm -f conftest.err
@@ -403,6 +404,18 @@ _EOF
 		     "\`CFLAGS=-I/path/to/dir' when running this script." >&2
 		exit 1
 	fi
+	test "$is_quiet" = "no" &&
+	  echo $n "Checking whether libintl must be explicitly linked... "
+	(eval $CC $CFLAGS conftest.c -o conftest) 2>conftest.err
+	rm -f conftest.o conftest.c conftest
+	if test ! -s conftest.err; then
+		use_lintl="no"
+		test "$is_quiet" = "no" && echo "no."
+	else
+		use_lintl="yes"
+		test "$is_quiet" = "no" && echo "yes."
+	fi
+	rm -f conftest.err
 fi
 
 # Check for `sysexits.h'
@@ -471,7 +484,9 @@ test "$use_color_woe32" = "yes" &&
 test "$use_fullwidth" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_FULLWIDTH"
 test "$use_gettext" = "yes" &&
-  feature_CFLAGS="$feature_CFLAGS -DVP_USE_GETTEXT -lintl"
+  feature_CFLAGS="$feature_CFLAGS -DVP_USE_GETTEXT"
+test "$use_lintl" = "yes" &&
+  feature_CFLAGS="$feature_CFLAGS -lintl"
 test "$use_gettext" = "yes" && test -n "$localedir" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_LOCALE_DIR=\\\"\${LOCALEDIR}\\\""
 test "$use_sysexits" = "yes" &&
