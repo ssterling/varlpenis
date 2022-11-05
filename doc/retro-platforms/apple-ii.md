@@ -2,9 +2,9 @@ Cross-compiling varlpenis for the Apple II series
 =================================================
 
 This tutorial is designed to work with the
-[https://cc65.github.io/](cc65) compiler.
+[cc65](https://cc65.github.io/) compiler.
 Get a copy working on your system, as well as an emulator such as
-[https://github.com/AppleWin/AppleWin](AppleWin) for optional testing purposes.
+[AppleWin](https://github.com/AppleWin/AppleWin) for optional testing purposes.
 
 Preliminary work
 ----------------
