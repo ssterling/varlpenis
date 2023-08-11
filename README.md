@@ -74,7 +74,7 @@ Contributing
 Tabs for indentation, spaces for alignment.  Put brackets on separate lines
 for functions and the like; same line for enumerations or `if` clauses.
 Just go through the code and copy the style; or,
-[send me an e-Mail](ssterling@firemail.cc) if you're really that worried.
+[send me an e-Mail](sprice623@aol.com) if you're really that worried.
 
 Please be descriptive in commits and merge requests; “fixed shit” doesn't
 cut it.

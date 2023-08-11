@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: varlpenis\n"
-"Report-Msgid-Bugs-To: ssterling@firemail.cc\n"
+"Report-Msgid-Bugs-To: sprice623@aol.com\n"
 "POT-Creation-Date: 2020-01-22 11:11-0500\n"
 "PO-Revision-Date: 2021-06-23 13:54+0200\n"
 "Last-Translator: Kun Attila <attila@attilakundev.com>\n"

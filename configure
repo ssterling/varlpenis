@@ -603,7 +603,7 @@ CLEAN_MO=clean-mo-files
 
 # gettext tools options
 XGETTEXT_OPTIONS = --add-comments --sort-output
-MSGID_BUGS_ADDRESS = ssterling@firemail.cc
+MSGID_BUGS_ADDRESS = sprice623@aol.com
 COPYRIGHT_HOLDER = Seth Price
 
 _EOF
