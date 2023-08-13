@@ -485,7 +485,7 @@ test "$use_fullwidth" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_FULLWIDTH"
 test "$use_gettext" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_USE_GETTEXT"
-test "$use_lintl" = "yes" &&
+test "$use_gettext" = yes && "$use_lintl" = "yes" &&
   feature_CFLAGS="$feature_CFLAGS -lintl"
 test "$use_gettext" = "yes" && test -n "$localedir" &&
   feature_CFLAGS="$feature_CFLAGS -DVP_LOCALE_DIR=\\\"\${LOCALEDIR}\\\""
