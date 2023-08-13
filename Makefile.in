@@ -13,13 +13,14 @@
 DEBUG_CFLAGS = -g -O0 -std=c89 -pedantic # works with Clang
 
 C_FILES = ${SRCDIR}/main.c ${SRCDIR}/draw.c ${SRCDIR}/options.c
+H_FILES = ${SRCDIR}/draw.h ${SRCDIR}/exits.h ${SRCDIR}/i18n.h ${SRCDIR}/options.h ${SRCDIR}/strings.h
 
 .PHONY: all install install-strip install-bin install-bin-strip \
 	install-docs uninstall uninstall-bin uninstall-docs check clean
 
 all: varlpenis ${BUILD_MO}
 
-varlpenis: ## Build binary executable
+varlpenis: ${C_FILES} ${H_FILES} ## Build binary executable
 	${CC} ${CFLAGS} ${C_FILES} ${FEATURE_CFLAGS} -o varlpenis
 
 install: install-bin install-docs ${INSTALL_MO} ## Install all files
