@@ -47,6 +47,11 @@ static char *repeat_string(const char *str, unsigned int count)
 void draw_penis(const unsigned int length, const unsigned int distance,
                 const enum DRAW_FLAGS_E flags)
 {
+	char *scrotum_char;
+	char *shaft_char;
+	char *head_char;
+	char *ejac_char;
+
 #ifdef VP_USE_COLOR_CONIO
 #if defined(__TURBOC__) || defined(__BORLANDC__)
 	struct text_info old_text_info;
@@ -62,78 +67,33 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 	console = GetStdHandle(STD_OUTPUT_HANDLE);
 #endif /* VP_USE_COLOR_WOE32 */
 
+	/* Processing fullwidth independently of color
+	 * prevents ungodly nested conditionals */
 #ifdef VP_USE_FULLWIDTH
-#if defined(VP_USE_COLOR_ANSI)
-	if ((flags & FULLWIDTH) && (flags & COLOR)) {
-		printf("%s%s%s%s%s%s%s%s%s\n",
-		       SCROTUM_COLOR_ANSI, SCROTUM_CHAR_UTF8,
-		       SHAFT_COLOR_ANSI,
-		       repeat_string(SHAFT_CHAR_UTF8, length),
-		       HEAD_COLOR_ANSI, HEAD_CHAR_UTF8,
-		       EJAC_COLOR_ANSI,
-		       repeat_string(EJAC_CHAR_UTF8, distance),
-		       RESET_CODE_ANSI);
-		return;
-	}
-#elif defined(VP_USE_COLOR_CONIO)
-	if ((flags & FULLWIDTH) && (flags & COLOR)) {
-		/* Save current text color */
-#if defined(__TURBOC__) || defined(__BORLANDC__)
-		gettextinfo(&old_text_info);
-		old_text_color = old_text_info.attribute;
-#elif defined(__CC65__)
-		old_text_color = (int)cpeekcolor(); /* at current cursor pos */
-#endif /* (__TURBOC__ || __BORLANDC__) || __CC65__ */
-
-		textcolor(SCROTUM_COLOR_CONIO);
-		cprintf("%s", SCROTUM_CHAR_UTF8);
-		textcolor(SHAFT_COLOR_CONIO);
-		cprintf("%s", repeat_string(SHAFT_CHAR_UTF8, length));
-		textcolor(HEAD_COLOR_CONIO);
-		cprintf("%s", HEAD_CHAR_UTF8);
-		textcolor(EJAC_COLOR_CONIO);
-		cprintf("%s", repeat_string(EJAC_CHAR_UTF8, length));
-		textcolor(old_text_color);
-
-		return;
-	}
-#elif defined(VP_USE_COLOR_WOE32)
-	if ((flags & FULLWIDTH) && (flags & COLOR)) {
-		GetConsoleScreenBufferInfo(console, &csbi_info);
-		old_console_attrs = csbi_info.wAttributes;
-
-		SetConsoleTextAttribute(console, SCROTUM_COLOR_WOE32);
-		printf("%s", SCROTUM_CHAR_UTF8);
-		SetConsoleTextAttribute(console, SHAFT_COLOR_WOE32);
-		printf("%s", repeat_string(SHAFT_CHAR_UTF8, length));
-		SetConsoleTextAttribute(console, HEAD_COLOR_WOE32);
-		printf("%s", HEAD_CHAR_UTF8);
-		SetConsoleTextAttribute(console, EJAC_COLOR_WOE32);
-		printf("%s", repeat_string(EJAC_CHAR_UTF8, length));
-		SetConsoleTextAttribute(console, old_console_attrs);
-		return;
-	}
-#endif /* VP_USE_COLOR_[...] */
-
 	if (flags & FULLWIDTH) {
-		printf("%s%s%s%s\n",
-		       SCROTUM_CHAR_UTF8,
-		       repeat_string(SHAFT_CHAR_UTF8, length),
-		       HEAD_CHAR_UTF8,
-		       repeat_string(EJAC_CHAR_UTF8, distance));
-		return;
+		scrotum_char = SCROTUM_CHAR_UTF8;
+		shaft_char = SHAFT_CHAR_UTF8;
+		head_char = HEAD_CHAR_UTF8;
+		ejac_char = EJAC_CHAR_UTF8;
+	} else {
+#endif /* VP_USE_FULLWIDTH */
+		scrotum_char = SCROTUM_CHAR;
+		shaft_char = SHAFT_CHAR;
+		head_char = HEAD_CHAR;
+		ejac_char = EJAC_CHAR;
+#ifdef VP_USE_FULLWIDTH
 	}
 #endif /* VP_USE_FULLWIDTH */
 
 #if defined(VP_USE_COLOR_ANSI)
 	if (flags & COLOR) {
 		printf("%s%s%s%s%s%s%s%s%s\n",
-		       SCROTUM_COLOR_ANSI, SCROTUM_CHAR,
+		       SCROTUM_COLOR_ANSI, scrotum_char,
 		       SHAFT_COLOR_ANSI,
-		       repeat_string(SHAFT_CHAR, length),
-		       HEAD_COLOR_ANSI, HEAD_CHAR,
+		       repeat_string(shaft_char, length),
+		       HEAD_COLOR_ANSI, head_char,
 		       EJAC_COLOR_ANSI,
-		       repeat_string(EJAC_CHAR, distance),
+		       repeat_string(ejac_char, distance),
 		       RESET_CODE_ANSI);
 		return;
 	}
@@ -148,13 +108,13 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 #endif /* (__TURBOC__ || __BORLANDC__) || __CC65__ */
 
 		textcolor(SCROTUM_COLOR_CONIO);
-		cprintf("%s", SCROTUM_CHAR);
+		cprintf("%s", scrotum_char);
 		textcolor(SHAFT_COLOR_CONIO);
-		cprintf("%s", repeat_string(SHAFT_CHAR, length));
+		cprintf("%s", repeat_string(shaft_char, length));
 		textcolor(HEAD_COLOR_CONIO);
-		cprintf("%s", HEAD_CHAR);
+		cprintf("%s", head_char);
 		textcolor(EJAC_COLOR_CONIO);
-		cprintf("%s", repeat_string(EJAC_CHAR, length));
+		cprintf("%s", repeat_string(ejac_char, length));
 		textcolor(old_text_color);
 		return;
 	}
@@ -164,13 +124,13 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 		old_console_attrs = csbi_info.wAttributes;
 
 		SetConsoleTextAttribute(console, SCROTUM_COLOR_WOE32);
-		printf("%s", SCROTUM_CHAR);
+		printf("%s", scrotum_char);
 		SetConsoleTextAttribute(console, SHAFT_COLOR_WOE32);
-		printf("%s", repeat_string(SHAFT_CHAR, length));
+		printf("%s", repeat_string(shaft_char, length));
 		SetConsoleTextAttribute(console, HEAD_COLOR_WOE32);
-		printf("%s", HEAD_CHAR);
+		printf("%s", head_char);
 		SetConsoleTextAttribute(console, EJAC_COLOR_WOE32);
-		printf("%s", repeat_string(EJAC_CHAR, length));
+		printf("%s", repeat_string(ejac_char, length));
 		SetConsoleTextAttribute(console, old_console_attrs);
 		return;
 	}
@@ -178,7 +138,7 @@ void draw_penis(const unsigned int length, const unsigned int distance,
 
 	/* No flags */
 	printf("%s%s%s%s\n",
-	       SCROTUM_CHAR, repeat_string(SHAFT_CHAR, length),
-	       HEAD_CHAR, repeat_string(EJAC_CHAR, distance));
+	       scrotum_char, repeat_string(shaft_char, length),
+	       head_char, repeat_string(ejac_char, distance));
 	return;
 }
