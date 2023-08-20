@@ -76,6 +76,9 @@ int main(int argc, char *argv[])
 #elif defined(__APPLE2__)
 	/* `KEYIN' routine loop number */
 	srand(*(unsigned char*)0x4E);
+#elif defined(__ATARI__)
+	/* High eight bits of POKEY polynomial counter */
+	srand(*(unsigned char*)0xD20A);
 #else /* VP_USE_POSIXTIME || !VP_NO_TIME || system types… */
 #warning "`VP_NO_TIME' is defined, but there appears to be no " \
          "alternate solution to seed `srand()' for the target system.  " \
